@@ -1,19 +1,39 @@
-import React from "react";
+import React, {KeyboardEvent,ChangeEvent, useState} from "react";
 import {TaskType} from "./App";
 
 type TodolistType = {
     filterStateTasks: Array<TaskType>
     title: string
-    deleteTask: (taskId: number) => void
+    deleteTask: (taskId: string) => void
+    creatTask: (titleTask: string) => void
     filtrationTasks: (filterValue: filterValueType) => void
 }
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
 
 
+
+
 export const Todolist = (props: TodolistType) => {
 
-    const deleteTaskHundler = (taskId: number) => {
+    const  [titleTask,setTitleTask] = useState('')
+    
+    const creatTaskClickEnterHundler = (event:KeyboardEvent<HTMLInputElement>) => {
+      if(event.key === 'Enter') {
+          creatTaskHandler()
+      }
+    }
+
+    const creatTitleForTaskHundler = (event:ChangeEvent<HTMLInputElement>) => {
+        setTitleTask(event.currentTarget.value)
+    }
+
+    const creatTaskHandler = () => {
+      props.creatTask(titleTask)
+        setTitleTask('')
+    }
+
+    const deleteTaskHundler = (taskId: string) => {
         props.deleteTask(taskId)
     }
 
@@ -25,8 +45,11 @@ export const Todolist = (props: TodolistType) => {
         <div>
             <h2>{props.title}</h2>
             <div>
-                <input/>
-                <button>+</button>
+                <input
+                    onKeyPress={creatTaskClickEnterHundler}
+                    onChange={creatTitleForTaskHundler}
+                    value={titleTask}/>
+                <button onClick={creatTaskHandler}>+</button>
             </div>
             <div>
                 {
