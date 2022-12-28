@@ -20,6 +20,11 @@ const App = () => {
         {id:v1(),title:'English',isDone:false}
     ])
 
+    const changeChekboxTask = (taskId:string,valueChekbox:boolean) => {
+        setTasks(tasks.map(el => el.id===taskId
+            ? {...el,isDone: valueChekbox} : el))
+    }
+
     const creatTask = (titleTask:string) => {
         setTasks([{id:v1(),title:titleTask,isDone:true},...tasks])
     }
@@ -41,6 +46,7 @@ const App = () => {
     return (
         <div className="App">
             <Todolist
+                changeChekboxTask={changeChekboxTask}
                 creatTask={creatTask}
                 filtrationTasks={filtrationTasks}
                 deleteTask={deleteTask}

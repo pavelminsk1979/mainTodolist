@@ -5,6 +5,7 @@ type TodolistType = {
     filterStateTasks: Array<TaskType>
     title: string
     deleteTask: (taskId: string) => void
+    changeChekboxTask: (taskId: string,valueChekbox:boolean) => void
     creatTask: (titleTask: string) => void
     filtrationTasks: (filterValue: filterValueType) => void
 }
@@ -17,6 +18,10 @@ export type filterValueType = 'all' | 'complited' | 'needToDo'
 export const Todolist = (props: TodolistType) => {
 
     const  [titleTask,setTitleTask] = useState('')
+
+    const changeChekboxTaskHandler = (taskId: string,valueChekbox:boolean) => {
+      props.changeChekboxTask(taskId,valueChekbox)
+    }
     
     const creatTaskClickEnterHundler = (event:KeyboardEvent<HTMLInputElement>) => {
       if(event.key === 'Enter') {
@@ -29,7 +34,9 @@ export const Todolist = (props: TodolistType) => {
     }
 
     const creatTaskHandler = () => {
-      props.creatTask(titleTask)
+        if(titleTask.trim()!=='') {
+            props.creatTask(titleTask.trim())
+        }
         setTitleTask('')
     }
 
@@ -59,6 +66,10 @@ export const Todolist = (props: TodolistType) => {
                                 <input
                                     type='checkbox'
                                     checked={task.isDone}
+                                    onChange={
+                                        (event)=>changeChekboxTaskHandler(task.id,
+                                        event.currentTarget.checked)
+                                    }
                                 />
                                 <span>{task.title}</span>
                                 <button onClick={() => deleteTaskHundler(task.id)}>DEL</button>
