@@ -1,43 +1,48 @@
-import React, {KeyboardEvent,ChangeEvent, useState} from "react";
+import React, {KeyboardEvent, ChangeEvent, useState} from "react";
 import {TaskType} from "./App";
+import st from './Todolist.module.css';
 
 type TodolistType = {
     filterStateTasks: Array<TaskType>
     title: string
     deleteTask: (taskId: string) => void
-    changeChekboxTask: (taskId: string,valueChekbox:boolean) => void
+    changeChekboxTask: (taskId: string, valueChekbox: boolean) => void
     creatTask: (titleTask: string) => void
     filtrationTasks: (filterValue: filterValueType) => void
+    filter:filterValueType
 }
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
 
 
-
-
 export const Todolist = (props: TodolistType) => {
 
-    const  [titleTask,setTitleTask] = useState('')
+    const [titleTask, setTitleTask] = useState('')
+    const [error, setError] = useState<null | string>(null)
 
-    const changeChekboxTaskHandler = (taskId: string,valueChekbox:boolean) => {
-      props.changeChekboxTask(taskId,valueChekbox)
-    }
-    
-    const creatTaskClickEnterHundler = (event:KeyboardEvent<HTMLInputElement>) => {
-      if(event.key === 'Enter') {
-          creatTaskHandler()
-      }
+    const changeChekboxTaskHandler = (taskId: string, valueChekbox: boolean) => {
+        props.changeChekboxTask(taskId, valueChekbox)
     }
 
-    const creatTitleForTaskHundler = (event:ChangeEvent<HTMLInputElement>) => {
+    const creatTaskClickEnterHundler = (event: KeyboardEvent<HTMLInputElement>) => {
+        if (event.key === 'Enter') {
+            creatTaskHandler()
+        }
+    }
+
+    const creatTitleForTaskHundler = (event: ChangeEvent<HTMLInputElement>) => {
         setTitleTask(event.currentTarget.value)
+        setError(null)
     }
 
     const creatTaskHandler = () => {
-        if(titleTask.trim()!=='') {
+        if (titleTask.trim() !== '') {
             props.creatTask(titleTask.trim())
+            setTitleTask('')
+        } else {
+            setError('Text is required')
         }
-        setTitleTask('')
+
     }
 
     const deleteTaskHundler = (taskId: string) => {
@@ -52,23 +57,24 @@ export const Todolist = (props: TodolistType) => {
         <div>
             <h2>{props.title}</h2>
             <div>
-                <input
-                    onKeyPress={creatTaskClickEnterHundler}
-                    onChange={creatTitleForTaskHundler}
-                    value={titleTask}/>
+                <input className={error ? st.frame : ''}
+                       onKeyPress={creatTaskClickEnterHundler}
+                       onChange={creatTitleForTaskHundler}
+                       value={titleTask}/>
                 <button onClick={creatTaskHandler}>+</button>
+                {error && <div className={st.error}>{error}</div>}
             </div>
             <div>
                 {
                     props.filterStateTasks.map(task => {
                         return (
-                            <li key={task.id}>
+                            <li key={task.id} className={task.isDone ? st.isDone : ''}>
                                 <input
                                     type='checkbox'
                                     checked={task.isDone}
                                     onChange={
-                                        (event)=>changeChekboxTaskHandler(task.id,
-                                        event.currentTarget.checked)
+                                        (event) => changeChekboxTaskHandler(task.id,
+                                            event.currentTarget.checked)
                                     }
                                 />
                                 <span>{task.title}</span>
@@ -79,9 +85,21 @@ export const Todolist = (props: TodolistType) => {
                 }
             </div>
             <div>
-                <button onClick={() => filtrationTasksHundler('all')}>All</button>
-                <button onClick={() => filtrationTasksHundler('complited')}>Complited</button>
-                <button onClick={() => filtrationTasksHundler('needToDo')}>Need to do</button>
+                <button
+                    className={props.filter==='all'? st.filtr : ''}
+                    onClick={() => filtrationTasksHundler('all')}
+                >All
+                </button>
+                <button
+                    className={props.filter==='complited'? st.filtr : ''}
+                    onClick={() => filtrationTasksHundler('complited')}
+                >Complited
+                </button>
+                <button
+                    className={props.filter==='needToDo'? st.filtr : ''}
+                    onClick={() => filtrationTasksHundler('needToDo')}
+                >Need to do
+                </button>
             </div>
         </div>
     )

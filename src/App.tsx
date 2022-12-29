@@ -11,7 +11,7 @@ export type TaskType = {
 
 const App = () => {
 
-    const [filter,setFilter] = useState('all')
+    const [filter,setFilter] = useState<filterValueType>('all')
 
     const [tasks,setTasks] = useState( [
         {id:v1(),title:'JS',isDone:true},
@@ -46,6 +46,7 @@ const App = () => {
     return (
         <div className="App">
             <Todolist
+                filter={filter}
                 changeChekboxTask={changeChekboxTask}
                 creatTask={creatTask}
                 filtrationTasks={filtrationTasks}
