@@ -8,8 +8,9 @@ type TodolistType = {
     deleteTask: (taskId: string) => void
     changeChekboxTask: (taskId: string, valueChekbox: boolean) => void
     creatTask: (titleTask: string) => void
-    filtrationTasks: (filterValue: filterValueType) => void
+    filtrationTasks: (idTodol:string,filterValue: filterValueType) => void
     filter:filterValueType
+    idTodol:string
 }
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
@@ -50,7 +51,7 @@ export const Todolist = (props: TodolistType) => {
     }
 
     const filtrationTasksHundler = (filterValue: filterValueType) => {
-        props.filtrationTasks(filterValue)
+        props.filtrationTasks(props.idTodol,filterValue)
     }
 
     return (
