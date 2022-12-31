@@ -5,9 +5,9 @@ import st from './Todolist.module.css';
 type TodolistType = {
     filterStateTasks: Array<TaskType>
     title: string
-    deleteTask: (taskId: string) => void
-    changeChekboxTask: (taskId: string, valueChekbox: boolean) => void
-    creatTask: (titleTask: string) => void
+    deleteTask: (idTodol:string,taskId: string) => void
+    changeChekboxTask: (idTodol:string,taskId: string, valueChekbox: boolean) => void
+    creatTask: (idTodol:string,titleTask: string) => void
     filtrationTasks: (idTodol:string,filterValue: filterValueType) => void
     filter:filterValueType
     idTodol:string
@@ -22,7 +22,7 @@ export const Todolist = (props: TodolistType) => {
     const [error, setError] = useState<null | string>(null)
 
     const changeChekboxTaskHandler = (taskId: string, valueChekbox: boolean) => {
-        props.changeChekboxTask(taskId, valueChekbox)
+        props.changeChekboxTask(props.idTodol,taskId, valueChekbox)
     }
 
     const creatTaskClickEnterHundler = (event: KeyboardEvent<HTMLInputElement>) => {
@@ -38,7 +38,7 @@ export const Todolist = (props: TodolistType) => {
 
     const creatTaskHandler = () => {
         if (titleTask.trim() !== '') {
-            props.creatTask(titleTask.trim())
+            props.creatTask(props.idTodol,titleTask.trim())
             setTitleTask('')
         } else {
             setError('Text is required')
@@ -47,7 +47,7 @@ export const Todolist = (props: TodolistType) => {
     }
 
     const deleteTaskHundler = (taskId: string) => {
-        props.deleteTask(taskId)
+        props.deleteTask(props.idTodol,taskId)
     }
 
     const filtrationTasksHundler = (filterValue: filterValueType) => {

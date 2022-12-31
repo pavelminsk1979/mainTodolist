@@ -15,9 +15,11 @@ export type StateTodolistType = {
     filter: filterValueType
 }
 
-const App = () => {
+type StateTasksType = {
+    [key : string] : Array<TaskType>
+}
 
-   /* const [filter, setFilter] = useState<filterValueType>('all')*/
+const App = () => {
 
     const todolist1 = v1();
     const todolist2 = v1();
@@ -29,7 +31,7 @@ const App = () => {
         ]
     )
 
-    const [tasks, setTasks] = useState({
+    const [tasks, setTasks] = useState<StateTasksType>({
         [todolist1]: [
             {id: v1(), title: 'JS', isDone: true},
             {id: v1(), title: 'HTML&CSS', isDone: true},
@@ -43,21 +45,25 @@ const App = () => {
         ]
     })
 
+    const deleteTask = (idTodol:string,taskId: string) => {
+        setTasks({...tasks,[idTodol]:tasks[idTodol].filter(
+            e=>e.id!==taskId)})
+    }
+
+
+    const creatTask = (idTodol:string,titleTask: string) => {
+        setTasks({...tasks,[idTodol]:[
+            {id: v1(), title:titleTask, isDone: true},...tasks[idTodol]]})
+    }
+
+
+    const changeChekboxTask = (idTodol:string,taskId: string, valueChekbox: boolean) => {
+        setTasks({...tasks,[idTodol]:tasks[idTodol].map(e=>e.id===taskId?{...e,isDone:valueChekbox}:e)})
+    }
+
+
     const filtrationTasks = (idTodol:string,filterValue: filterValueType) => {
         setTodolists(todolists.map(el=>el.id===idTodol?{...el,filter:filterValue}:el))
-    }
-
-    const changeChekboxTask = (taskId: string, valueChekbox: boolean) => {
-        /*setTasks(tasks.map(el => el.id === taskId
-            ? {...el, isDone: valueChekbox} : el))*/
-    }
-
-    const creatTask = (titleTask: string) => {
-      /*  setTasks([{id: v1(), title: titleTask, isDone: true}, ...tasks])*/
-    }
-
-    const deleteTask = (taskId: string) => {
-        /*setTasks(tasks.filter(el => el.id !== taskId))*/
     }
 
 
