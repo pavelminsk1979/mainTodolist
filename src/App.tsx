@@ -46,6 +46,18 @@ const App = () => {
         ]
     })
 
+    const changeTitleTask = (idTodol:string,taskId: string,editText:string) => {
+        setTasks({...tasks,[idTodol]:tasks[idTodol].map(
+            el=>el.id===taskId?{...el,title:editText}:el
+            )})
+    }
+
+
+    const changeTitleTodolist = (idTodol:string,editText:string) => {
+        setTodolists(todolists.map(e=>e.id===idTodol?{...e,title:editText}:e))
+    }
+
+
     const createTodolist = (title:string) => {
         const newIdTodolist = v1()
         setTodolists([{
@@ -99,6 +111,8 @@ const App = () => {
 
                     return (
                         <Todolist
+                            changeTitleTask={changeTitleTask}
+                            changeTitleTodolist={changeTitleTodolist}
                             deleteTodolist={deleteTodolist}
                             idTodol={todol.id}
                             key={todol.id}

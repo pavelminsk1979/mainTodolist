@@ -2,6 +2,7 @@ import React, {KeyboardEvent, ChangeEvent, useState} from "react";
 import {TaskType} from "./App";
 import st from './Todolist.module.css';
 import {AddItemForm} from "./AddItemForm";
+import {EditTitle} from "./EditTitle";
 
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void
@@ -13,6 +14,8 @@ type TodolistType = {
     filtrationTasks: (idTodol: string, filterValue: filterValueType) => void
     filter: filterValueType
     idTodol: string
+    changeTitleTodolist: (idTodol: string, editText: string) => void
+    changeTitleTask: (idTodol: string, taskId: string, editText: string) => void
 }
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
@@ -20,8 +23,16 @@ export type filterValueType = 'all' | 'complited' | 'needToDo'
 
 export const Todolist = (props: TodolistType) => {
 
-    const creatTask = (titleTask:string) => {
-            props.creatTask(props.idTodol, titleTask)
+    const changeTitleTodolist = (editText: string) => {
+        props.changeTitleTodolist(props.idTodol, editText)
+    }
+
+    const changeTitleTask = (taskId: string, editText: string) => {
+        props.changeTitleTask(props.idTodol, taskId, editText)
+    }
+
+    const creatTask = (titleTask: string) => {
+        props.creatTask(props.idTodol, titleTask)
     }
 
 
@@ -44,11 +55,14 @@ export const Todolist = (props: TodolistType) => {
 
     return (
         <div>
-            <h2>{props.title}
+            <h2>
+                <EditTitle
+                    callback={changeTitleTodolist}
+                    title={props.title}/>
                 <button onClick={deleteTodolistHandler}>DEL</button>
             </h2>
             <AddItemForm
-            callback = {creatTask}
+                callback={creatTask}
             />
 
             <div>
@@ -64,7 +78,10 @@ export const Todolist = (props: TodolistType) => {
                                             event.currentTarget.checked)
                                     }
                                 />
-                                <span>{task.title}</span>
+                                <EditTitle
+                                    title={task.title}
+                                    callback={(editText: string) => changeTitleTask(
+                                        task.id, editText)}/>
                                 <button onClick={() => deleteTaskHundler(task.id)}>DEL</button>
                             </li>
                         )
