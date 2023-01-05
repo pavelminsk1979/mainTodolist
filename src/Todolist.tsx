@@ -1,8 +1,13 @@
-import React, {KeyboardEvent, ChangeEvent, useState} from "react";
+import React from "react";
 import {TaskType} from "./App";
 import st from './Todolist.module.css';
 import {AddItemForm} from "./AddItemForm";
 import {EditTitle} from "./EditTitle";
+import Button from "@mui/material/Button";
+import DeleteSweep from "@mui/icons-material/DeleteSweep";
+import IconButton from "@mui/material/IconButton";
+import Delete from "@mui/icons-material/Delete";
+import Checkbox from "@mui/material/Checkbox";
 
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void
@@ -59,7 +64,12 @@ export const Todolist = (props: TodolistType) => {
                 <EditTitle
                     callback={changeTitleTodolist}
                     title={props.title}/>
-                <button onClick={deleteTodolistHandler}>DEL</button>
+                <IconButton
+                    size="small"
+                    color="primary"
+                    onClick={deleteTodolistHandler}>
+                    <Delete/>
+                </IconButton>
             </h2>
             <AddItemForm
                 callback={creatTask}
@@ -69,9 +79,9 @@ export const Todolist = (props: TodolistType) => {
                 {
                     props.filterStateTasks.map(task => {
                         return (
-                            <li key={task.id} className={task.isDone ? st.isDone : ''}>
-                                <input
-                                    type='checkbox'
+                            <div key={task.id} className={task.isDone ? st.isDone : ''}>
+                                <Checkbox
+                                    size="small"
                                     checked={task.isDone}
                                     onChange={
                                         (event) => changeChekboxTaskHandler(task.id,
@@ -82,28 +92,37 @@ export const Todolist = (props: TodolistType) => {
                                     title={task.title}
                                     callback={(editText: string) => changeTitleTask(
                                         task.id, editText)}/>
-                                <button onClick={() => deleteTaskHundler(task.id)}>DEL</button>
-                            </li>
+                                <IconButton
+                                    size="small"
+                                    color="primary"
+                                    onClick={() => deleteTaskHundler(task.id)}>
+                                    <DeleteSweep/>
+                                </IconButton>
+
+                            </div>
                         )
                     })
                 }
             </div>
             <div>
-                <button
-                    className={props.filter === 'all' ? st.filtr : ''}
+                <Button
+                    size="small"
+                    variant={props.filter === 'all'?"contained":"outlined"}
                     onClick={() => filtrationTasksHundler('all')}
                 >All
-                </button>
-                <button
-                    className={props.filter === 'complited' ? st.filtr : ''}
+                </Button>
+                <Button
+                    size="small"
+                    variant={props.filter === 'complited'?"contained":"outlined"}
                     onClick={() => filtrationTasksHundler('complited')}
                 >Complited
-                </button>
-                <button
-                    className={props.filter === 'needToDo' ? st.filtr : ''}
+                </Button>
+                <Button
+                    size="small"
+                    variant={props.filter === 'needToDo'?"contained":"outlined"}
                     onClick={() => filtrationTasksHundler('needToDo')}
                 >Need to do
-                </button>
+                </Button>
             </div>
         </div>
     )

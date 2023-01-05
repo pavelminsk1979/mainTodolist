@@ -6,12 +6,6 @@
     border-color: red;
 }
 
-.filtr{
-    border-color: #2590ae;
-   background-color: #2590ae;
-    color: white;
-}
-
 .isDone{
     opacity: 0.6;
 }

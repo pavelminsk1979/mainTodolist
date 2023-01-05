@@ -1,4 +1,5 @@
 import {ChangeEvent, useState} from "react";
+import TextField from "@mui/material/TextField";
 
 type EditTitleType = {
   title:string
@@ -31,11 +32,13 @@ const [changeRender,setChangeRender]=useState(true)
       ?<span
           onDoubleClick={onDoubleClickHundler}
           >{props.title}</span>
-    :<input
-          onChange={onChangeHundler}
-          onBlur={onBlurHundler}
-          autoFocus
-          value={editText}
-          />
+    :<TextField
+              onChange={onChangeHundler}
+              onBlur={onBlurHundler}
+              autoFocus
+              value={editText}
+              id="standard-basic"
+              variant="standard" />
+
   )
 }

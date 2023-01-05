@@ -1,8 +1,11 @@
 import React, {useState} from 'react';
-import './App.css';
 import {filterValueType, Todolist} from "./Todolist";
 import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
+import HeaderAppBar from "./HeaderAppBar";
+import Container from "@mui/material/Container";
+import Grid from "@mui/material/Grid";
+import Paper from "@mui/material/Paper";
 
 export type TaskType = {
     id: string
@@ -96,8 +99,13 @@ const App = () => {
 
 
     return (
-        <div className="App">
+        <div >
+            <HeaderAppBar/>
+            <Container fixed>
+                <Grid container style={{padding:'15px'}}>
             <AddItemForm callback = {createTodolist}/>
+                </Grid>
+                <Grid container spacing={4}>
             {
                 todolists.map(todol => {
 
@@ -109,7 +117,8 @@ const App = () => {
                         filterStateTasks = tasks[todol.id].filter(elem => !elem.isDone)
                     }
 
-                    return (
+                    return ( <Grid item>
+                            <Paper style={{padding:'15px'}}>
                         <Todolist
                             changeTitleTask={changeTitleTask}
                             changeTitleTodolist={changeTitleTodolist}
@@ -123,10 +132,13 @@ const App = () => {
                             deleteTask={deleteTask}
                             title={todol.title}
                             filterStateTasks={filterStateTasks}/>
+                            </Paper>
+                        </Grid>
                     )
                 })
             }
-
+                </Grid>
+            </Container>
         </div>
     );
 }

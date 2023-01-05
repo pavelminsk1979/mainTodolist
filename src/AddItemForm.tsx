@@ -1,5 +1,8 @@
 import st from "./Todolist.module.css";
 import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import IconButton from "@mui/material/IconButton";
+import AddBox from "@mui/icons-material/AddBox";
+import TextField from "@mui/material/TextField";
 
 type CommonCreateTitleType = {
     callback:(titleTask:string)=>void
@@ -34,11 +37,20 @@ export const AddItemForm = (props:CommonCreateTitleType) => {
 
   return(
       <div>
-        <input className={error ? st.frame : ''}
-               onKeyPress={creatTaskClickEnterHundler}
-               onChange={creatTitleForTaskHundler}
-               value={titleTask}/>
-        <button onClick={creatTaskHandler}>+</button>
+          <TextField
+              error={!!error}
+              size="small"
+              onKeyPress={creatTaskClickEnterHundler}
+              onChange={creatTitleForTaskHundler}
+              value={titleTask}
+              id="outlined-basic"
+              variant="outlined" />
+
+          <IconButton
+              color="primary"
+              onClick={creatTaskHandler}>
+              <AddBox/>
+          </IconButton>
         {error && <div className={st.error}>{error}</div>}
       </div>
   )
