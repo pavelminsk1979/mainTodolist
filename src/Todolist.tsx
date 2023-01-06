@@ -16,7 +16,7 @@ type TodolistType = {
     deleteTask: (idTodol: string, taskId: string) => void
     changeChekboxTask: (idTodol: string, taskId: string, valueChekbox: boolean) => void
     creatTask: (idTodol: string, titleTask: string) => void
-    filtrationTasks: (idTodol: string, filterValue: filterValueType) => void
+    filtrationForTodolist: (idTodol: string, filterValue: filterValueType) => void
     filter: filterValueType
     idTodol: string
     changeTitleTodolist: (idTodol: string, editText: string) => void
@@ -54,8 +54,8 @@ export const Todolist = (props: TodolistType) => {
         props.deleteTask(props.idTodol, taskId)
     }
 
-    const filtrationTasksHundler = (filterValue: filterValueType) => {
-        props.filtrationTasks(props.idTodol, filterValue)
+    const filtrationForTodolistHundler = (filterValue: filterValueType) => {
+        props.filtrationForTodolist(props.idTodol, filterValue)
     }
 
     return (
@@ -108,19 +108,19 @@ export const Todolist = (props: TodolistType) => {
                 <Button
                     size="small"
                     variant={props.filter === 'all'?"contained":"outlined"}
-                    onClick={() => filtrationTasksHundler('all')}
+                    onClick={() => filtrationForTodolistHundler('all')}
                 >All
                 </Button>
                 <Button
                     size="small"
                     variant={props.filter === 'complited'?"contained":"outlined"}
-                    onClick={() => filtrationTasksHundler('complited')}
+                    onClick={() => filtrationForTodolistHundler('complited')}
                 >Complited
                 </Button>
                 <Button
                     size="small"
                     variant={props.filter === 'needToDo'?"contained":"outlined"}
-                    onClick={() => filtrationTasksHundler('needToDo')}
+                    onClick={() => filtrationForTodolistHundler('needToDo')}
                 >Need to do
                 </Button>
             </div>

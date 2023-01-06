@@ -92,7 +92,7 @@ const App = () => {
     }
 
 
-    const filtrationTasks = (idTodol:string,filterValue: filterValueType) => {
+    const filtrationForTodolist = (idTodol:string,filterValue: filterValueType) => {
         setTodolists(todolists.map(el=>el.id===idTodol?{...el,filter:filterValue}:el))
     }
 
@@ -128,7 +128,7 @@ const App = () => {
                             filter={todol.filter}
                             changeChekboxTask={changeChekboxTask}
                             creatTask={creatTask}
-                            filtrationTasks={filtrationTasks}
+                            filtrationForTodolist={filtrationForTodolist}
                             deleteTask={deleteTask}
                             title={todol.title}
                             filterStateTasks={filterStateTasks}/>
