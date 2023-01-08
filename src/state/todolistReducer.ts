@@ -45,7 +45,7 @@ export const changeTitleTodolist = (todolist1:string,newTitle:string) => {
 }
 
 
-type createTodolistType = ReturnType<typeof createTodolist>
+export type createTodolistType = ReturnType<typeof createTodolist>
 export const createTodolist = (newTitle: string) => {
     return {
         type: 'CREATE-TODOLIST',
@@ -54,7 +54,7 @@ export const createTodolist = (newTitle: string) => {
     } as const
 }
 
-type  deleteTodolistType = ReturnType<typeof deleteTodolist>
+export type  deleteTodolistType = ReturnType<typeof deleteTodolist>
 export const deleteTodolist = (todolistId: string) => {
     return {
         type: 'DELETE-TODOLIST',

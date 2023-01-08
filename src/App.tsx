@@ -19,7 +19,7 @@ export type StateTodolistType = {
     filter: filterValueType
 }
 
-type StateTasksType = {
+export type StateTasksType = {
     [key : string] : Array<TaskType>
 }
 
@@ -49,12 +49,6 @@ const App = () => {
         ]
     })
 
-    const changeTitleTask = (idTodol:string,taskId: string,editText:string) => {
-        setTasks({...tasks,[idTodol]:tasks[idTodol].map(
-            el=>el.id===taskId?{...el,title:editText}:el
-            )})
-    }
-
 
     const changeTitleTodolist = (idTodol:string,editText:string) => {
         setTodolists(todolists.map(e=>e.id===idTodol?{...e,title:editText}:e))
@@ -74,6 +68,17 @@ const App = () => {
         setTasks({...tasks})
     }
 
+    const filtrationForTodolist = (idTodol:string,filterValue: filterValueType) => {
+        setTodolists(todolists.map(el=>el.id===idTodol?{...el,filter:filterValue}:el))
+    }
+
+
+    const changeTitleTask = (idTodol:string,taskId: string,editText:string) => {
+        setTasks({...tasks,[idTodol]:tasks[idTodol].map(
+                el=>el.id===taskId?{...el,title:editText}:el
+            )})
+    }
+
 
     const deleteTask = (idTodol:string,taskId: string) => {
         setTasks({...tasks,[idTodol]:tasks[idTodol].filter(
@@ -89,11 +94,6 @@ const App = () => {
 
     const changeChekboxTask = (idTodol:string,taskId: string, valueChekbox: boolean) => {
         setTasks({...tasks,[idTodol]:tasks[idTodol].map(e=>e.id===taskId?{...e,isDone:valueChekbox}:e)})
-    }
-
-
-    const filtrationForTodolist = (idTodol:string,filterValue: filterValueType) => {
-        setTodolists(todolists.map(el=>el.id===idTodol?{...el,filter:filterValue}:el))
     }
 
 
