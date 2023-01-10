@@ -1,9 +1,20 @@
-import {StateTasksType} from "../App";
+
 import {createTodolistType, deleteTodolistType} from "./todolistReducer";
 
+export type TaskType = {
+    id: string
+    title: string
+    isDone: boolean
+}
 
-export const taskReducer = (
-    state: StateTasksType, action: ActionsType): StateTasksType => {
+export type StateTasksType = {
+    [key : string] : Array<TaskType>
+}
+
+const initialState:StateTasksType={}
+
+export const taskReducer = (state: StateTasksType=initialState,
+                            action: ActionsType): StateTasksType => {
     switch (action.type) {
         case 'DELETE-TASK': {
             return {

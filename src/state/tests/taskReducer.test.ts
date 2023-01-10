@@ -1,11 +1,18 @@
 
-import {StateTasksType} from "../../App";
-import {changeChekboxTaskAC, changeTitleTaskAC, createTaskAC, deleteTaskAC, taskReducer} from "../taskReducer";
-import {createTodolist, todolistReducer} from "../todolistReducer";
+import {
+    changeChekboxTaskAC,
+    changeTitleTaskAC,
+    createTaskAC,
+    deleteTaskAC,
+    StateTasksType,
+    taskReducer
+} from "../taskReducer";
+import {createTodolistAC} from "../todolistReducer";
 
-test('correct task should be deleted from correct array', () => {
+let startState:StateTasksType
 
-    const startState: StateTasksType = {
+beforeEach(()=>{
+    startState = {
         'todolist1': [
             {id: '1', title: 'JS', isDone: true},
             {id: '2', title: 'HTML&CSS', isDone: true},
@@ -18,6 +25,10 @@ test('correct task should be deleted from correct array', () => {
             {id: '3', title: 'Avatar', isDone: true},
         ]
     }
+})
+
+
+test('correct task should be deleted from correct array', () => {
 
     const endState = taskReducer(startState, deleteTaskAC('todolist2','2'))
 
@@ -36,20 +47,9 @@ test('correct task should be deleted from correct array', () => {
     })
 })
 
+
+
 test('correct task should be added to correct array', () => {
-    const startState: StateTasksType = {
-        'todolist1': [
-            {id: '1', title: 'JS', isDone: true},
-            {id: '2', title: 'HTML&CSS', isDone: true},
-            {id: '3', title: 'React', isDone: true},
-            {id: '4', title: 'English', isDone: false}
-        ],
-        'todolist2': [
-            {id: '1', title: 'Rembo', isDone: true},
-            {id: '2', title: 'YouTube', isDone: false},
-            {id: '3', title: 'Avatar', isDone: true},
-        ]
-    }
 
     const endState = taskReducer(startState,createTaskAC('todolist2','Shrek') )
 
@@ -61,20 +61,9 @@ test('correct task should be added to correct array', () => {
 })
 
 
+
+
 test('status of specified task should be changed', () => {
-    const startState: StateTasksType = {
-        'todolist1': [
-            {id: '1', title: 'JS', isDone: true},
-            {id: '2', title: 'HTML&CSS', isDone: true},
-            {id: '3', title: 'React', isDone: true},
-            {id: '4', title: 'English', isDone: false}
-        ],
-        'todolist2': [
-            {id: '1', title: 'Rembo', isDone: true},
-            {id: '2', title: 'YouTube', isDone: false},
-            {id: '3', title: 'Avatar', isDone: true},
-        ]
-    }
 
     const endState = taskReducer(startState,changeChekboxTaskAC('todolist2','1',false) )
 
@@ -83,20 +72,9 @@ test('status of specified task should be changed', () => {
     expect(endState['todolist1'][0].isDone).toBe(true)
 })
 
+
+
 test('correct task should change its name', () => {
-    const startState: StateTasksType = {
-        'todolist1': [
-            {id: '1', title: 'JS', isDone: true},
-            {id: '2', title: 'HTML&CSS', isDone: true},
-            {id: '3', title: 'React', isDone: true},
-            {id: '4', title: 'English', isDone: false}
-        ],
-        'todolist2': [
-            {id: '1', title: 'Rembo', isDone: true},
-            {id: '2', title: 'YouTube', isDone: false},
-            {id: '3', title: 'Avatar', isDone: true},
-        ]
-    }
 
     const endState = taskReducer(startState,changeTitleTaskAC('todolist2','1','Rembo 3') )
 
@@ -107,21 +85,8 @@ test('correct task should change its name', () => {
 
 
 test('new array should be added when new todolist is added', () => {
-    const startState: StateTasksType = {
-        'todolist1': [
-            {id: '1', title: 'JS', isDone: true},
-            {id: '2', title: 'HTML&CSS', isDone: true},
-            {id: '3', title: 'React', isDone: true},
-            {id: '4', title: 'English', isDone: false}
-        ],
-        'todolist2': [
-            {id: '1', title: 'Rembo', isDone: true},
-            {id: '2', title: 'YouTube', isDone: false},
-            {id: '3', title: 'Avatar', isDone: true},
-        ]
-    }
 
-    const endState = taskReducer(startState, createTodolist('New Title'))
+    const endState = taskReducer(startState, createTodolistAC('New Title'))
 
 
     const keys = Object.keys(endState)

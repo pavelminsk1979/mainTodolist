@@ -1,12 +1,12 @@
-import {StateTasksType, StateTodolistType} from "../../App";
-import {createTodolist, deleteTodolist, todolistReducer} from "../todolistReducer";
-import {taskReducer} from "../taskReducer";
+
+import {createTodolistAC, deleteTodolistAC, todolistReducer, TodolistType} from "../todolistReducer";
+import {StateTasksType, taskReducer} from "../taskReducer";
 
 test('ids should be equals', () => {
     const startTasksState: StateTasksType = {}
-    const startTodolistsState: Array<StateTodolistType> = []
+    const startTodolistsState: Array<TodolistType> = []
 
-const action = createTodolist('New Title')
+const action = createTodolistAC('New Title')
 
 
     const endTasksState = taskReducer(startTasksState,action )
@@ -39,7 +39,7 @@ test('property with todolistId should be deleted', () => {
         ]
     }
 
-    const endState = taskReducer(startState, deleteTodolist('todolist2'))
+    const endState = taskReducer(startState, deleteTodolistAC('todolist2'))
 
 
     const keys = Object.keys(endState)

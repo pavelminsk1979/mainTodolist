@@ -1,10 +1,18 @@
-import {StateTodolistType} from "../App";
+
 import {v1} from "uuid";
 import {filterValueType} from "../Todolist";
 
+export type TodolistType = {
+    id: string
+    title: string
+    filter: filterValueType
+}
 
-export const todolistReducer = (
-    state: Array<StateTodolistType>, action: ActionsType): Array<StateTodolistType> => {
+const initialState:Array<TodolistType>=[]
+
+
+export const todolistReducer = (state: Array<TodolistType>=initialState,
+                                action: ActionsType): Array<TodolistType> => {
     switch (action.type) {
         case 'DELETE-TODOLIST': {
             return state.filter(e => e.id !== action.todolistId)
@@ -25,8 +33,8 @@ export const todolistReducer = (
     }
 }
 
-type changeTodolistFilterType = ReturnType<typeof changeTodolistFilter>
-export const changeTodolistFilter = (todolist1:string,newFilter:filterValueType) => {
+type changeTodolistFilterType = ReturnType<typeof changeTodolistFilterAC>
+export const changeTodolistFilterAC = (todolist1:string, newFilter:filterValueType) => {
     return {
         type: 'CHANGE-TODOLIST-FILTER',
         todolist1,
@@ -35,8 +43,8 @@ export const changeTodolistFilter = (todolist1:string,newFilter:filterValueType)
 }
 
 
-type changeTitleTodolistType = ReturnType<typeof changeTitleTodolist>
-export const changeTitleTodolist = (todolist1:string,newTitle:string) => {
+type changeTitleTodolistType = ReturnType<typeof changeTitleTodolistAC>
+export const changeTitleTodolistAC = (todolist1:string, newTitle:string) => {
     return {
         type: 'CHANGE-TITLE-TODOLIST',
         todolist1,
@@ -45,8 +53,8 @@ export const changeTitleTodolist = (todolist1:string,newTitle:string) => {
 }
 
 
-export type createTodolistType = ReturnType<typeof createTodolist>
-export const createTodolist = (newTitle: string) => {
+export type createTodolistType = ReturnType<typeof createTodolistAC>
+export const createTodolistAC = (newTitle: string) => {
     return {
         type: 'CREATE-TODOLIST',
         newTitle,
@@ -54,8 +62,8 @@ export const createTodolist = (newTitle: string) => {
     } as const
 }
 
-export type  deleteTodolistType = ReturnType<typeof deleteTodolist>
-export const deleteTodolist = (todolistId: string) => {
+export type  deleteTodolistType = ReturnType<typeof deleteTodolistAC>
+export const deleteTodolistAC = (todolistId: string) => {
     return {
         type: 'DELETE-TODOLIST',
         todolistId

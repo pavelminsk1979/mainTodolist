@@ -1,5 +1,4 @@
 import React from "react";
-import {TaskType} from "./App";
 import st from './Todolist.module.css';
 import {AddItemForm} from "./AddItemForm";
 import {EditTitle} from "./EditTitle";
@@ -8,6 +7,7 @@ import DeleteSweep from "@mui/icons-material/DeleteSweep";
 import IconButton from "@mui/material/IconButton";
 import Delete from "@mui/icons-material/Delete";
 import Checkbox from "@mui/material/Checkbox";
+import {TaskType} from "./state/taskReducer";
 
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void

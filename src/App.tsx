@@ -1,99 +1,74 @@
-import React, {useState} from 'react';
+import React from 'react';
 import {filterValueType, Todolist} from "./Todolist";
-import {v1} from "uuid";
 import {AddItemForm} from "./AddItemForm";
 import HeaderAppBar from "./HeaderAppBar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
+import {
+    changeChekboxTaskAC,
+    changeTitleTaskAC,
+    createTaskAC,
+    deleteTaskAC,
+    StateTasksType
+} from "./state/taskReducer";
+import {
+    changeTitleTodolistAC,
+    changeTodolistFilterAC,
+    createTodolistAC,
+    deleteTodolistAC,
+     TodolistType
+} from "./state/todolistReducer";
+import {useDispatch, useSelector} from "react-redux";
+import {StateStoreType} from "./state/store";
 
-export type TaskType = {
-    id: string
-    title: string
-    isDone: boolean
-}
 
-export type StateTodolistType = {
-    id: string
-    title: string
-    filter: filterValueType
-}
-
-export type StateTasksType = {
-    [key : string] : Array<TaskType>
-}
 
 const App = () => {
 
-    const todolist1 = v1();
-    const todolist2 = v1();
+    const todolists = useSelector<StateStoreType,Array<TodolistType>>(state => state.todolists)
 
-    const [todolists, setTodolists] = useState<Array<StateTodolistType>>(
-        [
-            {id: todolist1, title: 'What to learn', filter: 'all'},
-            {id: todolist2, title: 'What to watch', filter: 'all'}
-        ]
-    )
+    const tasks = useSelector<StateStoreType,StateTasksType>(state => state.tasks)
 
-    const [tasks, setTasks] = useState<StateTasksType>({
-        [todolist1]: [
-            {id: v1(), title: 'JS', isDone: true},
-            {id: v1(), title: 'HTML&CSS', isDone: true},
-            {id: v1(), title: 'React', isDone: true},
-            {id: v1(), title: 'English', isDone: false}
-        ],
-        [todolist2]: [
-            {id: v1(), title: 'Rembo', isDone: true},
-            {id: v1(), title: 'YouTube', isDone: false},
-            {id: v1(), title: 'Avatar', isDone: true},
-        ]
-    })
+    const dispatch = useDispatch()
+
 
 
     const changeTitleTodolist = (idTodol:string,editText:string) => {
-        setTodolists(todolists.map(e=>e.id===idTodol?{...e,title:editText}:e))
+        dispatch(changeTitleTodolistAC(idTodol,editText))
     }
 
 
     const createTodolist = (title:string) => {
-        const newIdTodolist = v1()
-        setTodolists([{
-            id: newIdTodolist, title, filter: 'all'},...todolists])
-        setTasks({...tasks,[newIdTodolist]:[]})
+        dispatch(createTodolistAC(title))
     }
 
     const deleteTodolist = (idTodol:string) => {
-        setTodolists(todolists.filter(e=>e.id!==idTodol))
-        delete tasks[idTodol]
-        setTasks({...tasks})
+        dispatch(deleteTodolistAC(idTodol))
     }
 
     const filtrationForTodolist = (idTodol:string,filterValue: filterValueType) => {
-        setTodolists(todolists.map(el=>el.id===idTodol?{...el,filter:filterValue}:el))
+        dispatch(changeTodolistFilterAC(idTodol,filterValue))
     }
 
 
     const changeTitleTask = (idTodol:string,taskId: string,editText:string) => {
-        setTasks({...tasks,[idTodol]:tasks[idTodol].map(
-                el=>el.id===taskId?{...el,title:editText}:el
-            )})
+        dispatch(changeTitleTaskAC(idTodol,taskId,editText))
     }
 
 
     const deleteTask = (idTodol:string,taskId: string) => {
-        setTasks({...tasks,[idTodol]:tasks[idTodol].filter(
-            e=>e.id!==taskId)})
+        dispatch(deleteTaskAC(idTodol,taskId))
     }
 
 
     const creatTask = (idTodol:string,titleTask: string) => {
-        setTasks({...tasks,[idTodol]:[
-            {id: v1(), title:titleTask, isDone: true},...tasks[idTodol]]})
+        dispatch(createTaskAC(idTodol,titleTask))
     }
 
 
     const changeChekboxTask = (idTodol:string,taskId: string, valueChekbox: boolean) => {
-        setTasks({...tasks,[idTodol]:tasks[idTodol].map(e=>e.id===taskId?{...e,isDone:valueChekbox}:e)})
+        dispatch(changeChekboxTaskAC(idTodol,taskId, valueChekbox))
     }
 
 
