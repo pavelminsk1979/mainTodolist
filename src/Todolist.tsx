@@ -1,17 +1,15 @@
-import React from "react";
-import st from './Todolist.module.css';
+import React, {useCallback} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditTitle} from "./EditTitle";
 import Button from "@mui/material/Button";
-import DeleteSweep from "@mui/icons-material/DeleteSweep";
 import IconButton from "@mui/material/IconButton";
 import Delete from "@mui/icons-material/Delete";
-import Checkbox from "@mui/material/Checkbox";
 import {TaskType} from "./state/taskReducer";
+import {Task} from "./Task";
 
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void
-    filterStateTasks: Array<TaskType>
+    tasksForTodolist: Array<TaskType>
     title: string
     deleteTask: (idTodol: string, taskId: string) => void
     changeChekboxTask: (idTodol: string, taskId: string, valueChekbox: boolean) => void
@@ -32,13 +30,13 @@ export const Todolist = (props: TodolistType) => {
         props.changeTitleTodolist(props.idTodol, editText)
     }
 
-    const changeTitleTask = (taskId: string, editText: string) => {
+    const changeTitleTaskHandler = (taskId: string, editText: string) => {
         props.changeTitleTask(props.idTodol, taskId, editText)
     }
 
-    const creatTask = (titleTask: string) => {
+    const creatTask = useCallback((titleTask: string) => {
         props.creatTask(props.idTodol, titleTask)
-    }
+    }, [])
 
 
     const deleteTodolistHandler = () => {
@@ -56,6 +54,15 @@ export const Todolist = (props: TodolistType) => {
 
     const filtrationForTodolistHundler = (filterValue: filterValueType) => {
         props.filtrationForTodolist(props.idTodol, filterValue)
+    }
+
+
+    let filterStateTasks = props.tasksForTodolist
+    if (props.filter === 'complited') {
+        filterStateTasks = filterStateTasks.filter(elem => elem.isDone)
+    }
+    if (props.filter === 'needToDo') {
+        filterStateTasks = filterStateTasks.filter(elem => !elem.isDone)
     }
 
     return (
@@ -77,29 +84,15 @@ export const Todolist = (props: TodolistType) => {
 
             <div>
                 {
-                    props.filterStateTasks.map(task => {
+                    filterStateTasks.map(t => {
                         return (
-                            <div key={task.id} className={task.isDone ? st.isDone : ''}>
-                                <Checkbox
-                                    size="small"
-                                    checked={task.isDone}
-                                    onChange={
-                                        (event) => changeChekboxTaskHandler(task.id,
-                                            event.currentTarget.checked)
-                                    }
-                                />
-                                <EditTitle
-                                    title={task.title}
-                                    callback={(editText: string) => changeTitleTask(
-                                        task.id, editText)}/>
-                                <IconButton
-                                    size="small"
-                                    color="primary"
-                                    onClick={() => deleteTaskHundler(task.id)}>
-                                    <DeleteSweep/>
-                                </IconButton>
-
-                            </div>
+                            <Task
+                                changeChekboxTask={changeChekboxTaskHandler}
+                                changeTitleTask={changeTitleTaskHandler}
+                                deleteTask={deleteTaskHundler}
+                                task={t}
+                                key={t.id}
+                            />
                         )
                     })
                 }
@@ -107,19 +100,19 @@ export const Todolist = (props: TodolistType) => {
             <div>
                 <Button
                     size="small"
-                    variant={props.filter === 'all'?"contained":"outlined"}
+                    variant={props.filter === 'all' ? "contained" : "outlined"}
                     onClick={() => filtrationForTodolistHundler('all')}
                 >All
                 </Button>
                 <Button
                     size="small"
-                    variant={props.filter === 'complited'?"contained":"outlined"}
+                    variant={props.filter === 'complited' ? "contained" : "outlined"}
                     onClick={() => filtrationForTodolistHundler('complited')}
                 >Complited
                 </Button>
                 <Button
                     size="small"
-                    variant={props.filter === 'needToDo'?"contained":"outlined"}
+                    variant={props.filter === 'needToDo' ? "contained" : "outlined"}
                     onClick={() => filtrationForTodolistHundler('needToDo')}
                 >Need to do
                 </Button>

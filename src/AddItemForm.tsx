@@ -1,5 +1,5 @@
 import st from "./Todolist.module.css";
-import React, {ChangeEvent, KeyboardEvent, useState} from "react";
+import React, {ChangeEvent, KeyboardEvent, memo, useState} from "react";
 import IconButton from "@mui/material/IconButton";
 import AddBox from "@mui/icons-material/AddBox";
 import TextField from "@mui/material/TextField";
@@ -8,8 +8,9 @@ type CommonCreateTitleType = {
     callback:(titleTask:string)=>void
 }
 
-export const AddItemForm = (props:CommonCreateTitleType) => {
-
+export const AddItemForm = memo( (
+    props:CommonCreateTitleType) => {
+        console.log('******')
     const [titleTask, setTitleTask] = useState('')
     const [error, setError] = useState<null | string>(null)
 
@@ -55,3 +56,4 @@ export const AddItemForm = (props:CommonCreateTitleType) => {
       </div>
   )
 }
+)

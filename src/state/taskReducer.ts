@@ -1,5 +1,6 @@
 
 import {createTodolistType, deleteTodolistType} from "./todolistReducer";
+import {v1} from "uuid";
 
 export type TaskType = {
     id: string
@@ -24,7 +25,7 @@ export const taskReducer = (state: StateTasksType=initialState,
         }
         case "CREATE-TASK":{
             return {...state,[action.todolId]:[
-                    {id: '4', title: action.title, isDone: false},...state[action.todolId]
+                    {id: v1(), title: action.title, isDone: false},...state[action.todolId]
                 ]}
         }
         case 'CHANGE-CHEKBOX-TASK':{
