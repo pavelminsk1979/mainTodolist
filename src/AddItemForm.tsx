@@ -10,7 +10,6 @@ type CommonCreateTitleType = {
 
 export const AddItemForm = memo( (
     props:CommonCreateTitleType) => {
-        console.log('******')
     const [titleTask, setTitleTask] = useState('')
     const [error, setError] = useState<null | string>(null)
 
