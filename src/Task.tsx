@@ -4,7 +4,7 @@ import {EditTitle} from "./EditTitle";
 import IconButton from "@mui/material/IconButton";
 import DeleteSweep from "@mui/icons-material/DeleteSweep";
 import React, {ChangeEvent} from "react";
-import {TaskType} from "./state/taskReducer";
+import {TaskStatuses, TaskType} from "./api/api";
 
 
 type PropsTaskType = {
@@ -30,10 +30,10 @@ export const Task = (props: PropsTaskType) => {
     }
 
     return (
-        <div className={props.task.isDone ? st.isDone : ''}>
+        <div className={props.task.status===TaskStatuses.Complete ? st.isDone : ''}>
             <Checkbox
                 size="small"
-                checked={props.task.isDone}
+                checked={props.task.status===TaskStatuses.Complete}
                 onChange={changeChekboxTaskHandler}
             />
             <EditTitle

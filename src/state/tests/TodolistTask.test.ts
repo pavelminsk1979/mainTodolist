@@ -1,10 +1,12 @@
 
-import {createTodolistAC, deleteTodolistAC, todolistReducer, TodolistType} from "../todolistReducer";
+
+import {CompleteTodolistType, createTodolistAC, deleteTodolistAC, todolistReducer} from "../todolistReducer";
 import {StateTasksType, taskReducer} from "../taskReducer";
+import {TaskStatuses} from "../../api/api";
 
 test('ids should be equals', () => {
     const startTasksState: StateTasksType = {}
-    const startTodolistsState: Array<TodolistType> = []
+    const startTodolistsState: Array<CompleteTodolistType> = []
 
 const action = createTodolistAC('New Title')
 
@@ -27,15 +29,22 @@ const action = createTodolistAC('New Title')
 test('property with todolistId should be deleted', () => {
     const startState: StateTasksType = {
         'todolist1': [
-            {id: '1', title: 'JS', isDone: true},
-            {id: '2', title: 'HTML&CSS', isDone: true},
-            {id: '3', title: 'React', isDone: true},
-            {id: '4', title: 'English', isDone: false}
+            {id: '1', title: 'JS',status:TaskStatuses.Complete, todoListId:'todolist1',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
+            {id: '2', title: 'HTML&CSS', status:TaskStatuses.Complete, todoListId:'todolist1',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
+            {id: '3', title: 'React', status:TaskStatuses.Complete, todoListId:'todolist1',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
+            {id: '4', title: 'English', status:TaskStatuses.New, todoListId:'todolist1',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1}
         ],
         'todolist2': [
-            {id: '1', title: 'Rembo', isDone: true},
-            {id: '2', title: 'YouTube', isDone: false},
-            {id: '3', title: 'Avatar', isDone: true},
+            {id: '1', title: 'Rembo', status:TaskStatuses.Complete, todoListId:'todolist2',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
+            {id: '2', title: 'YouTube', status:TaskStatuses.New, todoListId:'todolist2',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
+            {id: '3', title: 'Avatar', status:TaskStatuses.Complete, todoListId:'todolist2',description:'',startDate:'',deadline:'',
+                addedDate:'',order:0, priority:1},
         ]
     }
 

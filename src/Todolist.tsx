@@ -1,11 +1,15 @@
-import React, {useCallback} from "react";
+import React, {useCallback, useEffect} from "react";
 import {AddItemForm} from "./AddItemForm";
 import {EditTitle} from "./EditTitle";
 import Button from "@mui/material/Button";
 import IconButton from "@mui/material/IconButton";
 import Delete from "@mui/icons-material/Delete";
-import {TaskType} from "./state/taskReducer";
 import {Task} from "./Task";
+import {filterValueType} from "./state/todolistReducer";
+import {TaskStatuses, TaskType} from "./api/api";
+import {useDispatch} from "react-redux";
+import {setTaskTC} from "./state/taskReducer";
+
 
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void
@@ -21,10 +25,14 @@ type TodolistType = {
     changeTitleTask: (idTodol: string, taskId: string, editText: string) => void
 }
 
-export type filterValueType = 'all' | 'complited' | 'needToDo'
+
 
 
 export const Todolist = (props: TodolistType) => {
+    const dispatch = useDispatch<any>()
+    useEffect(()=>{
+        dispatch (setTaskTC(props.idTodol))
+    },[])
 
     const changeTitleTodolist = (editText: string) => {
         props.changeTitleTodolist(props.idTodol, editText)
@@ -59,10 +67,10 @@ export const Todolist = (props: TodolistType) => {
 
     let filterStateTasks = props.tasksForTodolist
     if (props.filter === 'complited') {
-        filterStateTasks = filterStateTasks.filter(elem => elem.isDone)
+        filterStateTasks = filterStateTasks.filter(elem => elem.status===TaskStatuses.Complete)
     }
     if (props.filter === 'needToDo') {
-        filterStateTasks = filterStateTasks.filter(elem => !elem.isDone)
+        filterStateTasks = filterStateTasks.filter(elem => elem.status===TaskStatuses.New)
     }
 
     return (

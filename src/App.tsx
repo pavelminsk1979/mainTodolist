@@ -1,5 +1,5 @@
-import React, {useCallback} from 'react';
-import {filterValueType, Todolist} from "./Todolist";
+import React, {useCallback, useEffect} from 'react';
+import {Todolist} from "./Todolist";
 import {AddItemForm} from "./AddItemForm";
 import HeaderAppBar from "./HeaderAppBar";
 import Container from "@mui/material/Container";
@@ -14,22 +14,22 @@ import {
 } from "./state/taskReducer";
 import {
     changeTitleTodolistAC,
-    changeTodolistFilterAC,
+    changeTodolistFilterAC, CompleteTodolistType,
     createTodolistAC,
-    deleteTodolistAC,
-    TodolistType
+    deleteTodolistAC, filterValueType, setTodolist
 } from "./state/todolistReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateStoreType} from "./state/store";
 
 
-const App = () => {
 
-    const todolists = useSelector<StateStoreType, Array<TodolistType>>(state => state.todolists)
+const App = () => {
+    const dispatch = useDispatch<any>()
+
+    const todolists = useSelector<StateStoreType, Array<CompleteTodolistType>>(state => state.todolists)
 
     const tasks = useSelector<StateStoreType, StateTasksType>(state => state.tasks)
 
-    const dispatch = useDispatch()
 
 
     const changeTitleTodolist = (idTodol: string, editText: string) => {
@@ -69,6 +69,10 @@ const App = () => {
         dispatch(changeChekboxTaskAC(idTodol, taskId, valueChekbox))
     }
 
+    useEffect(() =>{
+        dispatch(setTodolist())
+    },[])
+
 
     return (
         <div>
@@ -80,7 +84,6 @@ const App = () => {
                 <Grid container spacing={4}>
                     {
                         todolists.map(todol => {
-
                             const tasksForTodolist = tasks[todol.id]
                             return (<Grid item>
                                     <Paper style={{padding: '15px'}}>
