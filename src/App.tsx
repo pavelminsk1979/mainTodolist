@@ -6,10 +6,10 @@ import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
 import {
-    changeChekboxTaskAC,
-    changeTitleTaskAC,
-    createTaskAC,
-    deleteTaskAC,
+    changeChekboxTaskAC, changeChekboxTaskTC,
+    changeTitleTaskAC, changeTitleTaskTC,
+    createTaskTC,
+    deleteTaskTC,
     StateTasksType
 } from "./state/taskReducer";
 import {
@@ -51,22 +51,22 @@ const App = () => {
 
 
     const changeTitleTask = (idTodol: string, taskId: string, editText: string) => {
-        dispatch(changeTitleTaskAC(idTodol, taskId, editText))
+        dispatch(changeTitleTaskTC(idTodol, taskId, editText))
     }
 
 
     const deleteTask = (idTodol: string, taskId: string) => {
-        dispatch(deleteTaskAC(idTodol, taskId))
+        dispatch(deleteTaskTC(idTodol, taskId))
     }
 
 
     const creatTask = (idTodol: string, titleTask: string) => {
-        dispatch(createTaskAC(idTodol, titleTask))
+        dispatch(createTaskTC(idTodol, titleTask))
     }
 
 
     const changeChekboxTask = (idTodol: string, taskId: string, valueChekbox: boolean) => {
-        dispatch(changeChekboxTaskAC(idTodol, taskId, valueChekbox))
+        dispatch(changeChekboxTaskTC(idTodol, taskId, valueChekbox))
     }
 
     useEffect(() =>{

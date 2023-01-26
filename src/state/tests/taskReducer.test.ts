@@ -79,7 +79,7 @@ test('correct task should be added to correct array', () => {
 
 test('status of specified task should be changed', () => {
 
-    const endState = taskReducer(startState,changeChekboxTaskAC('todolist2','1',false) )
+    const endState = taskReducer(startState,changeChekboxTaskAC('todolist2','1',TaskStatuses.New) )
 
 
     expect(endState['todolist2'][0].status).toBe(false)

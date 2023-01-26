@@ -35,16 +35,18 @@ export const tasksAPI = {
     deleteTask(todolistId: string, taskId: string) {
         return instance.delete<CommonTask>(`todo-lists/${todolistId}/tasks/${taskId}`);
     },
-    updateTask(todolistId: string, taskId: string, modal: ModalType) {
+    updateTaskTitle(todolistId: string, taskId: string, modal: ModalType) {
+        return instance.put<CommonTask<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, modal)
+    },
+    updateChekboxTask(todolistId: string, taskId: string, modal: ModalType) {
         return instance.put<CommonTask<{ item: TaskType }>>(`todo-lists/${todolistId}/tasks/${taskId}`, modal)
     }
 }
 
-type ModalType = {
+export type ModalType = {
     title: string,
     description: string,
-    completed: boolean,
-    status: number,
+    status: TaskStatuses,
     priority: number,
     startDate: string,
     deadline: string

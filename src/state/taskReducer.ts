@@ -1,6 +1,7 @@
 import {createTodolistType, deleteTodolistType, setTodolistAC, setTodolistACType} from "./todolistReducer";
-import {tasksAPI, TaskStatuses, TaskType, todolistAPI} from "../api/api";
+import {ModalType, tasksAPI, TaskStatuses, TaskType, todolistAPI} from "../api/api";
 import {Dispatch} from "redux";
+import {StateStoreType} from "./store";
 
 
 export type StateTasksType = {
@@ -37,7 +38,7 @@ export const taskReducer = (state: StateTasksType = initialState,
         case 'CHANGE-CHEKBOX-TASK': {
             return {
                 ...state, [action.todolId]: state[action.todolId].map(
-                    e => e.id === action.taskId ? {...e, isDone: action.isDone} : e
+                    e => e.id === action.taskId ? {...e, status: action.status} : e
                 )
             }
         }
@@ -89,13 +90,13 @@ export const changeTitleTaskAC = (todolId: string, taskId: string, title: string
 
 
 type changeChekboxTaskACType = ReturnType<typeof changeChekboxTaskAC>
-export const changeChekboxTaskAC = (todolId: string, taskId: string, isDone: boolean
+export const changeChekboxTaskAC = (todolId: string, taskId: string, status: TaskStatuses
 ) => {
     return {
         type: 'CHANGE-CHEKBOX-TASK',
         todolId,
         taskId,
-        isDone
+        status
     } as const
 }
 
@@ -126,6 +127,67 @@ export const setTaskAC = (todolistId:string,tasks:Array<TaskType>) => {
         todolistId,
         tasks
     } as const
+}
+
+
+export const changeChekboxTaskTC = (todolistId: string, taskId: string, valueChekbox: boolean) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
+    const state = getState()
+    const allTasks = state.tasks
+    const taskForTodolist = allTasks[todolistId]
+    const task = taskForTodolist.find(e=>e.id===taskId)
+    let newStatus:TaskStatuses
+    if(valueChekbox===true){
+        newStatus=TaskStatuses.Complete
+    } else {newStatus = TaskStatuses.New}
+    if(task){
+        tasksAPI.updateTaskTitle(todolistId, taskId,{
+            title: task.title,
+            description: task.description,
+            status: newStatus,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline
+        })
+            .then((respons) => {
+                dispatch(changeChekboxTaskAC(todolistId, taskId, newStatus))
+            })
+    }
+}
+
+
+
+export const changeTitleTaskTC = (todolistId: string, taskId: string, editText: string) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
+    const state = getState()
+    const allTasks = state.tasks
+    const taskForTodolist = allTasks[todolistId]
+    const task = taskForTodolist.find(e=>e.id===taskId)
+if(task){
+    tasksAPI.updateTaskTitle(todolistId, taskId,{
+        title: editText,
+        description: task.description,
+        status: task.status,
+        priority: task.priority,
+        startDate: task.startDate,
+        deadline: task.deadline
+    })
+        .then((respons) => {
+            dispatch(changeTitleTaskAC(todolistId, taskId, editText))
+        })
+}
+}
+
+export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+    tasksAPI.createTask(todolistId, title)
+        .then((respons) => {
+            dispatch(createTaskAC(todolistId,title))
+        })
+}
+
+export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+    tasksAPI.deleteTask(todolistId, taskId)
+        .then((respons) => {
+            dispatch(deleteTaskAC(todolistId,taskId))
+        })
 }
 
 
