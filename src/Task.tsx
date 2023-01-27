@@ -11,7 +11,7 @@ type PropsTaskType = {
     task: TaskType
     deleteTask: (taskId: string) => void
     changeTitleTask: (taskId: string, editText: string) => void
-    changeChekboxTask: (taskId: string, valueChekbox: boolean) => void
+    changeChekboxTask: (taskId: string, newStatus:boolean) => void
 
 }
 

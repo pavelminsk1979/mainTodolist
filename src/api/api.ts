@@ -20,8 +20,8 @@ export const todolistAPI = {
     deleteTodolist(todolistId: string) {
         return instance.delete<CommonTodolistType>(`todo-lists/${todolistId}`);
     },
-    updateTodolist(todolistId: string, putAfterItemId: string) {
-        return instance.put<CommonTodolistType>(`todo-lists/${todolistId}`, {putAfterItemId})
+    updateTodolist(todolistId: string, title: string) {
+        return instance.put<CommonTodolistType>(`todo-lists/${todolistId}`, {title})
     }
 }
 

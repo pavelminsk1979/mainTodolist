@@ -5,21 +5,20 @@ import HeaderAppBar from "./HeaderAppBar";
 import Container from "@mui/material/Container";
 import Grid from "@mui/material/Grid";
 import Paper from "@mui/material/Paper";
-import {
-    changeChekboxTaskAC, changeChekboxTaskTC,
-    changeTitleTaskAC, changeTitleTaskTC,
+import {changeChekboxTaskTC,
+     changeTitleTaskTC,
     createTaskTC,
     deleteTaskTC,
     StateTasksType
 } from "./state/taskReducer";
-import {
-    changeTitleTodolistAC,
+import {changeTitleTodolistTC,
     changeTodolistFilterAC, CompleteTodolistType,
-    createTodolistAC,
-    deleteTodolistAC, filterValueType, setTodolist
+    createTodolistTC,
+    deleteTodolistTC, filterValueType, setTodolist
 } from "./state/todolistReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateStoreType} from "./state/store";
+
 
 
 
@@ -33,16 +32,16 @@ const App = () => {
 
 
     const changeTitleTodolist = (idTodol: string, editText: string) => {
-        dispatch(changeTitleTodolistAC(idTodol, editText))
+        dispatch(changeTitleTodolistTC(idTodol, editText))
     }
 
 
     const createTodolist = useCallback((title: string) => {
-        dispatch(createTodolistAC(title))
+        dispatch(createTodolistTC(title))
     }, [])
 
     const deleteTodolist = (idTodol: string) => {
-        dispatch(deleteTodolistAC(idTodol))
+        dispatch(deleteTodolistTC(idTodol))
     }
 
     const filtrationForTodolist = (idTodol: string, filterValue: filterValueType) => {
@@ -65,8 +64,8 @@ const App = () => {
     }
 
 
-    const changeChekboxTask = (idTodol: string, taskId: string, valueChekbox: boolean) => {
-        dispatch(changeChekboxTaskTC(idTodol, taskId, valueChekbox))
+    const changeChekboxTask = (idTodol: string, taskId: string, newStatus:boolean) => {
+        dispatch(changeChekboxTaskTC(idTodol, taskId, newStatus))
     }
 
     useEffect(() =>{

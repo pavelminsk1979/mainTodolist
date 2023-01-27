@@ -28,7 +28,7 @@ export const taskReducer = (state: StateTasksType = initialState,
                         priority: 0,
                         startDate: '',
                         deadline: '',
-                        id: '',
+                        id: action.taskId,
                         todoListId: action.todolId,
                         order: 0,
                         addedDate: ''}, ...state[action.todolId]
@@ -102,10 +102,11 @@ export const changeChekboxTaskAC = (todolId: string, taskId: string, status: Tas
 
 
 type createTaskACType = ReturnType<typeof createTaskAC>
-export const createTaskAC = (todolId: string, title: string) => {
+export const createTaskAC = (todolId: string,taskId: string, title: string) => {
     return {
         type: 'CREATE-TASK',
         todolId,
+        taskId,
         title
     } as const
 }
@@ -130,13 +131,13 @@ export const setTaskAC = (todolistId:string,tasks:Array<TaskType>) => {
 }
 
 
-export const changeChekboxTaskTC = (todolistId: string, taskId: string, valueChekbox: boolean) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
+export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: boolean) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
     const state = getState()
     const allTasks = state.tasks
     const taskForTodolist = allTasks[todolistId]
     const task = taskForTodolist.find(e=>e.id===taskId)
     let newStatus:TaskStatuses
-    if(valueChekbox===true){
+    if(status===true){
         newStatus=TaskStatuses.Complete
     } else {newStatus = TaskStatuses.New}
     if(task){
@@ -179,7 +180,7 @@ if(task){
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     tasksAPI.createTask(todolistId, title)
         .then((respons) => {
-            dispatch(createTaskAC(todolistId,title))
+            dispatch(createTaskAC(todolistId,respons.data.data.item.id,title))
         })
 }
 

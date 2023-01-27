@@ -16,7 +16,7 @@ type TodolistType = {
     tasksForTodolist: Array<TaskType>
     title: string
     deleteTask: (idTodol: string, taskId: string) => void
-    changeChekboxTask: (idTodol: string, taskId: string, valueChekbox: boolean) => void
+    changeChekboxTask: (idTodol: string, taskId: string, newStatus:boolean) => void
     creatTask: (idTodol: string, titleTask: string) => void
     filtrationForTodolist: (idTodol: string, filterValue: filterValueType) => void
     filter: filterValueType
@@ -51,8 +51,8 @@ export const Todolist = (props: TodolistType) => {
         props.deleteTodolist(props.idTodol)
     }
 
-    const changeChekboxTaskHandler = (taskId: string, valueChekbox: boolean) => {
-        props.changeChekboxTask(props.idTodol, taskId, valueChekbox)
+    const changeChekboxTaskHandler = (taskId: string, newStatus:boolean) => {
+        props.changeChekboxTask(props.idTodol, taskId, newStatus)
     }
 
 

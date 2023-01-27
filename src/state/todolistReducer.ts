@@ -82,6 +82,32 @@ export const setTodolistAC = (responsData: Array<TodolistType>) => {
 }
 
 
+
+
+export const changeTitleTodolistTC = (todolistId: string, title: string) => (dispatch:Dispatch) => {
+    todolistAPI.updateTodolist(todolistId, title)
+        .then((respons) => {
+            dispatch(changeTitleTodolistAC(todolistId,title))
+        })
+}
+
+
+export const createTodolistTC = (title: string) => (dispatch:Dispatch) => {
+    todolistAPI.createTodolist(title)
+        .then((respons) => {
+            dispatch(createTodolistAC(title))
+        })
+}
+
+
+export const deleteTodolistTC = (todolistId: string) => (dispatch:Dispatch) => {
+    todolistAPI.deleteTodolist(todolistId)
+        .then((respons) => {
+            dispatch(deleteTodolistAC(todolistId))
+        })
+}
+
+
 export const setTodolist = () => (dispatch:Dispatch) => {
     todolistAPI.getTodolists()
         .then((respons) => {

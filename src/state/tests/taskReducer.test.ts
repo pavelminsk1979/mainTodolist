@@ -65,7 +65,7 @@ test('correct task should be deleted from correct array', () => {
 
 test('correct task should be added to correct array', () => {
 
-    const endState = taskReducer(startState,createTaskAC('todolist2','Shrek') )
+    const endState = taskReducer(startState,createTaskAC('todolist2','1','Shrek') )
 
     expect(endState['todolist1'].length).toBe(4)
     expect(endState['todolist2'].length).toBe(4)
