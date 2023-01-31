@@ -18,6 +18,9 @@ import {changeTitleTodolistTC,
 } from "./state/todolistReducer";
 import {useDispatch, useSelector} from "react-redux";
 import {StateStoreType} from "./state/store";
+import LinearProgress from "@mui/material/LinearProgress";
+import {StatusLoadingType} from "./state/appReducer";
+import {ErrorSnackbar} from "./ErrorSnackbar";
 
 
 
@@ -28,6 +31,8 @@ const App = () => {
     const todolists = useSelector<StateStoreType, Array<CompleteTodolistType>>(state => state.todolists)
 
     const tasks = useSelector<StateStoreType, StateTasksType>(state => state.tasks)
+
+    const loading = useSelector<StateStoreType,StatusLoadingType>(state =>state.app.statusLoading)
 
 
 
@@ -75,7 +80,12 @@ const App = () => {
 
     return (
         <div>
+            <ErrorSnackbar/>
+
             <HeaderAppBar/>
+
+            {loading==='loading'&& <LinearProgress color="inherit" />}
+
             <Container fixed>
                 <Grid container style={{padding: '15px'}}>
                     <AddItemForm callback={createTodolist}/>
@@ -87,6 +97,7 @@ const App = () => {
                             return (<Grid item>
                                     <Paper style={{padding: '15px'}}>
                                         <Todolist
+                                            disableStatus={todol.disableStatus}
                                             changeTitleTask={changeTitleTask}
                                             changeTitleTodolist={changeTitleTodolist}
                                             deleteTodolist={deleteTodolist}

@@ -1,7 +1,8 @@
-import {createTodolistType, deleteTodolistType, setTodolistAC, setTodolistACType} from "./todolistReducer";
-import {ModalType, tasksAPI, TaskStatuses, TaskType, todolistAPI} from "../api/api";
+import {createTodolistType, deleteTodolistType, setTodolistACType} from "./todolistReducer";
+import { tasksAPI, TaskStatuses, TaskType} from "../api/api";
 import {Dispatch} from "redux";
 import {StateStoreType} from "./store";
+import {errorSnackbarShowAC, setStatusLoadingAC} from "./appReducer";
 
 
 export type StateTasksType = {
@@ -137,10 +138,11 @@ export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: 
     const taskForTodolist = allTasks[todolistId]
     const task = taskForTodolist.find(e=>e.id===taskId)
     let newStatus:TaskStatuses
-    if(status===true){
+    if(status){
         newStatus=TaskStatuses.Complete
     } else {newStatus = TaskStatuses.New}
     if(task){
+        dispatch(setStatusLoadingAC('loading'))
         tasksAPI.updateTaskTitle(todolistId, taskId,{
             title: task.title,
             description: task.description,
@@ -151,6 +153,7 @@ export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: 
         })
             .then((respons) => {
                 dispatch(changeChekboxTaskAC(todolistId, taskId, newStatus))
+                dispatch(setStatusLoadingAC('idle'))
             })
     }
 }
@@ -163,6 +166,7 @@ export const changeTitleTaskTC = (todolistId: string, taskId: string, editText: 
     const taskForTodolist = allTasks[todolistId]
     const task = taskForTodolist.find(e=>e.id===taskId)
 if(task){
+    dispatch(setStatusLoadingAC('loading'))
     tasksAPI.updateTaskTitle(todolistId, taskId,{
         title: editText,
         description: task.description,
@@ -173,29 +177,46 @@ if(task){
     })
         .then((respons) => {
             dispatch(changeTitleTaskAC(todolistId, taskId, editText))
+            dispatch(setStatusLoadingAC('idle'))
         })
 }
 }
 
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusLoadingAC('loading'))
     tasksAPI.createTask(todolistId, title)
         .then((respons) => {
-            dispatch(createTaskAC(todolistId,respons.data.data.item.id,title))
+            if (respons.data.resultCode === 0){
+                dispatch(createTaskAC(todolistId,respons.data.data.item.id,title))
+                dispatch(setStatusLoadingAC('idle'))
+            }  else   {
+                if (respons.data.messages.length){
+                    dispatch(errorSnackbarShowAC(respons.data.messages[0]))
+                }  else  {
+                    dispatch(errorSnackbarShowAC('Some Error'))
+                }
+                dispatch(setStatusLoadingAC('idle'))
+            }
+
         })
 }
 
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusLoadingAC('loading'))
     tasksAPI.deleteTask(todolistId, taskId)
         .then((respons) => {
             dispatch(deleteTaskAC(todolistId,taskId))
+            dispatch(setStatusLoadingAC('idle'))
         })
 }
 
 
 export const setTaskTC = (todolistId: string) => (dispatch: Dispatch) => {
+    dispatch(setStatusLoadingAC('loading'))
     tasksAPI.getTasks(todolistId)
         .then((respons) => {
             dispatch(setTaskAC(todolistId,respons.data.items))
+            dispatch(setStatusLoadingAC('idle'))
         })
 }
 

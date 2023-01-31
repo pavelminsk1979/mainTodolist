@@ -8,6 +8,7 @@ import {TaskStatuses, TaskType} from "./api/api";
 
 
 type PropsTaskType = {
+    disableStatus:boolean
     task: TaskType
     deleteTask: (taskId: string) => void
     changeTitleTask: (taskId: string, editText: string) => void
@@ -40,6 +41,7 @@ export const Task = (props: PropsTaskType) => {
                 title={props.task.title}
                 callback={changeTitleTaskHundler}/>
             <IconButton
+                disabled={props.disableStatus}
                 size="small"
                 color="primary"
                 onClick={deleteTaskHundler}>

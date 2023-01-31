@@ -5,6 +5,7 @@ import AddBox from "@mui/icons-material/AddBox";
 import TextField from "@mui/material/TextField";
 
 type CommonCreateTitleType = {
+    disableStatus?:boolean
     callback:(titleTask:string)=>void
 }
 
@@ -38,6 +39,7 @@ export const AddItemForm = memo( (
   return(
       <div>
           <TextField
+              disabled={props.disableStatus}
               error={!!error}
               size="small"
               onKeyPress={creatTaskClickEnterHundler}
@@ -47,6 +49,7 @@ export const AddItemForm = memo( (
               variant="outlined" />
 
           <IconButton
+              disabled={props.disableStatus}
               color="primary"
               onClick={creatTaskHandler}>
               <AddBox/>

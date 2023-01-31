@@ -100,7 +100,7 @@ test('correct task should change its name', () => {
 
 test('new array should be added when new todolist is added', () => {
 
-    const endState = taskReducer(startState, createTodolistAC('New Title'))
+    const endState = taskReducer(startState, createTodolistAC('todolist3','New Title'))
 
 
     const keys = Object.keys(endState)

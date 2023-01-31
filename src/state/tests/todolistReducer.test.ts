@@ -20,9 +20,9 @@ beforeEach(() => {
 
      startState = [
     {id: todolist1, title: 'What to learn', filter: 'all', addedDate:'',
-        order:0},
+        order:0,disableStatus:false},
     {id: todolist2, title: 'What to watch', filter: 'all', addedDate:'',
-        order:0}
+        order:0,disableStatus:false}
 ]
 })
 
@@ -42,7 +42,7 @@ test('correct todolist should be added', () => {
 
     let newTitle = 'New Todolist'
 
-    const endState = todolistReducer(startState, createTodolistAC(newTitle))
+    const endState = todolistReducer(startState, createTodolistAC('todolist3',newTitle))
 
     expect(endState.length).toBe(3)
     expect(endState[0].title).toBe(newTitle)

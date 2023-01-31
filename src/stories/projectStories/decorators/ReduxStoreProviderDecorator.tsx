@@ -6,19 +6,19 @@ import React from 'react';
 import {v1} from "uuid";
 import {StateStoreType} from "../../../state/store";
 import {TaskStatuses} from "../../../api/api";
+import {appReducer} from "../../../state/appReducer";
 
 
 const rootReducer = combineReducers({
     tasks: taskReducer,
-    todolists: todolistReducer
+    todolists: todolistReducer,
+    app:appReducer
 })
 
 const initialGlobalState = {
     todolists: [
-        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate:'',
-            order:0},
-        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate:'',
-            order:0}
+        {id: 'todolistId1', title: 'What to learn', filter: 'all', addedDate:'', order:0,disableStatus:false},
+        {id: 'todolistId2', title: 'What to buy', filter: 'all', addedDate:'', order:0,disableStatus:false}
     ],
     tasks: {
         ['todolistId1']: [
@@ -33,6 +33,10 @@ const initialGlobalState = {
             {id: v1(), title: 'YouTube', status:TaskStatuses.New, todoListId:'todolistId2',description:'',startDate:'',deadline:'',
                 addedDate:'',order:0, priority:1},
         ]
+    },
+    app : {
+        statusLoading: 'idle',
+        errorSnackbar:'ТРЯМ-С!'
     }
 }
 

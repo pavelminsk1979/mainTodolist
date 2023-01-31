@@ -23,6 +23,7 @@ type TodolistType = {
     idTodol: string
     changeTitleTodolist: (idTodol: string, editText: string) => void
     changeTitleTask: (idTodol: string, taskId: string, editText: string) => void
+    disableStatus:boolean
 }
 
 
@@ -80,6 +81,7 @@ export const Todolist = (props: TodolistType) => {
                     callback={changeTitleTodolist}
                     title={props.title}/>
                 <IconButton
+                    disabled={props.disableStatus}
                     size="small"
                     color="primary"
                     onClick={deleteTodolistHandler}>
@@ -87,6 +89,7 @@ export const Todolist = (props: TodolistType) => {
                 </IconButton>
             </h2>
             <AddItemForm
+                disableStatus={props.disableStatus}
                 callback={creatTask}
             />
 
@@ -95,6 +98,7 @@ export const Todolist = (props: TodolistType) => {
                     filterStateTasks.map(t => {
                         return (
                             <Task
+                                disableStatus={props.disableStatus}
                                 changeChekboxTask={changeChekboxTaskHandler}
                                 changeTitleTask={changeTitleTaskHandler}
                                 deleteTask={deleteTaskHundler}
