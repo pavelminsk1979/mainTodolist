@@ -151,9 +151,13 @@ export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: 
             startDate: task.startDate,
             deadline: task.deadline
         })
-            .then((respons) => {
+            .then(() => {
                 dispatch(changeChekboxTaskAC(todolistId, taskId, newStatus))
                 dispatch(setStatusLoadingAC('idle'))
+            })
+            .catch((error)=>{
+                dispatch(setStatusLoadingAC('idle'))
+                dispatch(errorSnackbarShowAC(error.message))
             })
     }
 }
@@ -175,9 +179,13 @@ if(task){
         startDate: task.startDate,
         deadline: task.deadline
     })
-        .then((respons) => {
+        .then(() => {
             dispatch(changeTitleTaskAC(todolistId, taskId, editText))
             dispatch(setStatusLoadingAC('idle'))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
         })
 }
 }
@@ -199,14 +207,22 @@ export const createTaskTC = (todolistId: string, title: string) => (dispatch: Di
             }
 
         })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
+        })
 }
 
 export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
     tasksAPI.deleteTask(todolistId, taskId)
-        .then((respons) => {
+        .then(() => {
             dispatch(deleteTaskAC(todolistId,taskId))
             dispatch(setStatusLoadingAC('idle'))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
         })
 }
 
@@ -217,6 +233,10 @@ export const setTaskTC = (todolistId: string) => (dispatch: Dispatch) => {
         .then((respons) => {
             dispatch(setTaskAC(todolistId,respons.data.items))
             dispatch(setStatusLoadingAC('idle'))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
         })
 }
 

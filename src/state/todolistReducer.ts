@@ -1,6 +1,6 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {errorSnackbarShowAC, setStatusLoadingAC, setStatusLoadingACType} from "./appReducer";
+import {errorSnackbarShowAC, setStatusLoadingAC} from "./appReducer";
 
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
@@ -106,9 +106,14 @@ export const changeDisableStatusAC = (todolistId:string,disableStatus:boolean) =
 export const changeTitleTodolistTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
     todolistAPI.updateTodolist(todolistId, title)
-        .then((respons) => {
+        .then(() => {
             dispatch(changeTitleTodolistAC(todolistId, title))
             dispatch(setStatusLoadingAC('idle'))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
+            dispatch(changeDisableStatusAC(todolistId,false))
         })
 }
 
@@ -130,6 +135,10 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
             }
 
         })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
+        })
 }
 
 
@@ -137,9 +146,14 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => 
     dispatch(setStatusLoadingAC('loading'))
     dispatch(changeDisableStatusAC(todolistId,true))
     todolistAPI.deleteTodolist(todolistId)
-        .then((respons) => {
+        .then(() => {
             dispatch(deleteTodolistAC(todolistId))
             dispatch(setStatusLoadingAC('idle'))
+            dispatch(changeDisableStatusAC(todolistId,false))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
             dispatch(changeDisableStatusAC(todolistId,false))
         })
 }
@@ -151,6 +165,10 @@ export const setTodolist = () => (dispatch: Dispatch) => {
         .then((respons) => {
             dispatch(setTodolistAC(respons.data))
             dispatch(setStatusLoadingAC('idle'))
+        })
+        .catch((error)=>{
+            dispatch(setStatusLoadingAC('idle'))
+            dispatch(errorSnackbarShowAC(error.message))
         })
 }
 
