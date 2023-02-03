@@ -52,7 +52,7 @@ export type ModalType = {
     deadline: string
 }
 
-type CommonTask<T = {}> = {
+export type CommonTask<T = {}> = {
     messages: Array<string>
     resultCode: number
     data: T

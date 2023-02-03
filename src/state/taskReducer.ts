@@ -1,8 +1,9 @@
 import {createTodolistType, deleteTodolistType, setTodolistACType} from "./todolistReducer";
-import { tasksAPI, TaskStatuses, TaskType} from "../api/api";
+import {tasksAPI, TaskStatuses, TaskType} from "../api/api";
 import {Dispatch} from "redux";
 import {StateStoreType} from "./store";
-import {errorSnackbarShowAC, setStatusLoadingAC} from "./appReducer";
+import { setStatusLoadingAC} from "./appReducer";
+import {utilsFunctionRejectPromis, utilsFunctionShowError} from "../utils/utilsForFunctionsThanks";
 
 
 export type StateTasksType = {
@@ -23,7 +24,8 @@ export const taskReducer = (state: StateTasksType = initialState,
         case "CREATE-TASK": {
             return {
                 ...state, [action.todolId]: [
-                    {   description: '',
+                    {
+                        description: '',
                         title: action.title,
                         status: TaskStatuses.New,
                         priority: 0,
@@ -32,7 +34,8 @@ export const taskReducer = (state: StateTasksType = initialState,
                         id: action.taskId,
                         todoListId: action.todolId,
                         order: 0,
-                        addedDate: ''}, ...state[action.todolId]
+                        addedDate: ''
+                    }, ...state[action.todolId]
                 ]
             }
         }
@@ -66,9 +69,9 @@ export const taskReducer = (state: StateTasksType = initialState,
             })
             return copyState
         }
-        case "SET-TASK":{
-          let copyStateTasks = {...state}
-            copyStateTasks[action.todolistId]=action.tasks
+        case "SET-TASK": {
+            let copyStateTasks = {...state}
+            copyStateTasks[action.todolistId] = action.tasks
             return copyStateTasks
         }
 
@@ -103,7 +106,7 @@ export const changeChekboxTaskAC = (todolId: string, taskId: string, status: Tas
 
 
 type createTaskACType = ReturnType<typeof createTaskAC>
-export const createTaskAC = (todolId: string,taskId: string, title: string) => {
+export const createTaskAC = (todolId: string, taskId: string, title: string) => {
     return {
         type: 'CREATE-TASK',
         todolId,
@@ -123,7 +126,7 @@ export const deleteTaskAC = (todolId: string, taskId: string) => {
 }
 
 type setTaskACType = ReturnType<typeof setTaskAC>
-export const setTaskAC = (todolistId:string,tasks:Array<TaskType>) => {
+export const setTaskAC = (todolistId: string, tasks: Array<TaskType>) => {
     return {
         type: 'SET-TASK',
         todolistId,
@@ -132,18 +135,20 @@ export const setTaskAC = (todolistId:string,tasks:Array<TaskType>) => {
 }
 
 
-export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: boolean) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
+export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: boolean) => (dispatch: Dispatch, getState: () => StateStoreType) => {
     const state = getState()
     const allTasks = state.tasks
     const taskForTodolist = allTasks[todolistId]
-    const task = taskForTodolist.find(e=>e.id===taskId)
-    let newStatus:TaskStatuses
-    if(status){
-        newStatus=TaskStatuses.Complete
-    } else {newStatus = TaskStatuses.New}
-    if(task){
+    const task = taskForTodolist.find(e => e.id === taskId)
+    let newStatus: TaskStatuses
+    if (status) {
+        newStatus = TaskStatuses.Complete
+    } else {
+        newStatus = TaskStatuses.New
+    }
+    if (task) {
         dispatch(setStatusLoadingAC('loading'))
-        tasksAPI.updateTaskTitle(todolistId, taskId,{
+        tasksAPI.updateTaskTitle(todolistId, taskId, {
             title: task.title,
             description: task.description,
             status: newStatus,
@@ -155,61 +160,52 @@ export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: 
                 dispatch(changeChekboxTaskAC(todolistId, taskId, newStatus))
                 dispatch(setStatusLoadingAC('idle'))
             })
-            .catch((error)=>{
-                dispatch(setStatusLoadingAC('idle'))
-                dispatch(errorSnackbarShowAC(error.message))
+            .catch((error) => {
+                utilsFunctionRejectPromis(error.message,dispatch)
             })
     }
 }
 
 
-
-export const changeTitleTaskTC = (todolistId: string, taskId: string, editText: string) => (dispatch: Dispatch, getState:()=>StateStoreType) => {
+export const changeTitleTaskTC = (todolistId: string, taskId: string, editText: string) => (dispatch: Dispatch, getState: () => StateStoreType) => {
     const state = getState()
     const allTasks = state.tasks
     const taskForTodolist = allTasks[todolistId]
-    const task = taskForTodolist.find(e=>e.id===taskId)
-if(task){
-    dispatch(setStatusLoadingAC('loading'))
-    tasksAPI.updateTaskTitle(todolistId, taskId,{
-        title: editText,
-        description: task.description,
-        status: task.status,
-        priority: task.priority,
-        startDate: task.startDate,
-        deadline: task.deadline
-    })
-        .then(() => {
-            dispatch(changeTitleTaskAC(todolistId, taskId, editText))
-            dispatch(setStatusLoadingAC('idle'))
+    const task = taskForTodolist.find(e => e.id === taskId)
+    if (task) {
+        dispatch(setStatusLoadingAC('loading'))
+        tasksAPI.updateTaskTitle(todolistId, taskId, {
+            title: editText,
+            description: task.description,
+            status: task.status,
+            priority: task.priority,
+            startDate: task.startDate,
+            deadline: task.deadline
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
-        })
-}
+            .then(() => {
+                dispatch(changeTitleTaskAC(todolistId, taskId, editText))
+                dispatch(setStatusLoadingAC('idle'))
+            })
+            .catch((error) => {
+                utilsFunctionRejectPromis(error.message,dispatch)
+            })
+    }
 }
 
 export const createTaskTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
     tasksAPI.createTask(todolistId, title)
         .then((respons) => {
-            if (respons.data.resultCode === 0){
-                dispatch(createTaskAC(todolistId,respons.data.data.item.id,title))
+            if (respons.data.resultCode === 0) {
+                dispatch(createTaskAC(todolistId, respons.data.data.item.id, title))
                 dispatch(setStatusLoadingAC('idle'))
-            }  else   {
-                if (respons.data.messages.length){
-                    dispatch(errorSnackbarShowAC(respons.data.messages[0]))
-                }  else  {
-                    dispatch(errorSnackbarShowAC('Some Error'))
-                }
-                dispatch(setStatusLoadingAC('idle'))
+            } else {
+                utilsFunctionShowError(respons.data, dispatch)
             }
 
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
         })
 }
 
@@ -217,12 +213,11 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
     dispatch(setStatusLoadingAC('loading'))
     tasksAPI.deleteTask(todolistId, taskId)
         .then(() => {
-            dispatch(deleteTaskAC(todolistId,taskId))
+            dispatch(deleteTaskAC(todolistId, taskId))
             dispatch(setStatusLoadingAC('idle'))
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
         })
 }
 
@@ -231,12 +226,11 @@ export const setTaskTC = (todolistId: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
     tasksAPI.getTasks(todolistId)
         .then((respons) => {
-            dispatch(setTaskAC(todolistId,respons.data.items))
+            dispatch(setTaskAC(todolistId, respons.data.items))
             dispatch(setStatusLoadingAC('idle'))
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
         })
 }
 

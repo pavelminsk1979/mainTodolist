@@ -1,6 +1,7 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import {errorSnackbarShowAC, setStatusLoadingAC} from "./appReducer";
+import { setStatusLoadingAC} from "./appReducer";
+import {utilsFunctionRejectPromis, utilsFunctionShowError} from "../utils/utilsForFunctionsThanks";
 
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
@@ -39,9 +40,9 @@ export const todolistReducer = (state: Array<CompleteTodolistType> = initialStat
         case "SET-TODOLIST": {
             return action.responsData.map(el => ({...el, filter: 'all', disableStatus: false}))
         }
-        case "CHANGE-DISABLE-STATUS":{
-            return state.map(el=>el.id===action.todolistId
-                ?{...el,disableStatus:action.disableStatus}:el)
+        case "CHANGE-DISABLE-STATUS": {
+            return state.map(el => el.id === action.todolistId
+                ? {...el, disableStatus: action.disableStatus} : el)
         }
         default:
             return state
@@ -94,7 +95,7 @@ export const setTodolistAC = (responsData: Array<TodolistType>) => {
 }
 
 export type  changeDisableStatusACType = ReturnType<typeof changeDisableStatusAC>
-export const changeDisableStatusAC = (todolistId:string,disableStatus:boolean) => {
+export const changeDisableStatusAC = (todolistId: string, disableStatus: boolean) => {
     return {
         type: 'CHANGE-DISABLE-STATUS',
         disableStatus,
@@ -110,10 +111,9 @@ export const changeTitleTodolistTC = (todolistId: string, title: string) => (dis
             dispatch(changeTitleTodolistAC(todolistId, title))
             dispatch(setStatusLoadingAC('idle'))
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
-            dispatch(changeDisableStatusAC(todolistId,false))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
+            dispatch(changeDisableStatusAC(todolistId, false))
         })
 }
 
@@ -126,35 +126,27 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
                 dispatch(createTodolistAC(respons.data.data.item.id, title))
                 dispatch(setStatusLoadingAC('idle'))
             } else {
-                if (respons.data.messages.length) {
-                    dispatch(errorSnackbarShowAC(respons.data.messages[0]))
-                } else {
-                    dispatch(errorSnackbarShowAC('Some Error'))
-                }
-                dispatch(setStatusLoadingAC('idle'))
+                utilsFunctionShowError(respons.data, dispatch)
             }
-
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
         })
 }
 
 
 export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
-    dispatch(changeDisableStatusAC(todolistId,true))
+    dispatch(changeDisableStatusAC(todolistId, true))
     todolistAPI.deleteTodolist(todolistId)
         .then(() => {
             dispatch(deleteTodolistAC(todolistId))
             dispatch(setStatusLoadingAC('idle'))
-            dispatch(changeDisableStatusAC(todolistId,false))
+            dispatch(changeDisableStatusAC(todolistId, false))
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
-            dispatch(changeDisableStatusAC(todolistId,false))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
+            dispatch(changeDisableStatusAC(todolistId, false))
         })
 }
 
@@ -166,9 +158,8 @@ export const setTodolist = () => (dispatch: Dispatch) => {
             dispatch(setTodolistAC(respons.data))
             dispatch(setStatusLoadingAC('idle'))
         })
-        .catch((error)=>{
-            dispatch(setStatusLoadingAC('idle'))
-            dispatch(errorSnackbarShowAC(error.message))
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message,dispatch)
         })
 }
 
