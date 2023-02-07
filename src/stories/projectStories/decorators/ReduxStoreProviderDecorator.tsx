@@ -7,12 +7,14 @@ import {v1} from "uuid";
 import {StateStoreType} from "../../../state/store";
 import {TaskStatuses} from "../../../api/api";
 import {appReducer} from "../../../state/appReducer";
+import {loginReduser} from "../../../state/loginReducer";
 
 
 const rootReducer = combineReducers({
     tasks: taskReducer,
     todolists: todolistReducer,
-    app:appReducer
+    app:appReducer,
+    isLogin:loginReduser
 })
 
 const initialGlobalState = {
@@ -37,6 +39,9 @@ const initialGlobalState = {
     app : {
         statusLoading: 'idle',
         errorSnackbar:'ТРЯМ-С!'
+    },
+    isLogin:{
+        isLoggedIn:false
     }
 }
 

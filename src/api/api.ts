@@ -43,6 +43,19 @@ export const tasksAPI = {
     }
 }
 
+export const authAPI = {
+    login (payload:LoginParamsType){
+        return instance.post<LoginParamsType,CommonTask<{userId:number}>>('auth/login',payload)
+    }
+}
+
+export type LoginParamsType = {
+    email: string
+    password: string
+    rememberMe?: boolean
+    captcha?:string
+}
+
 export type ModalType = {
     title: string,
     description: string,
