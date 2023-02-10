@@ -1,4 +1,4 @@
-import axios from "axios";
+import axios, {AxiosResponse} from "axios";
 
 
 const instance = axios.create({
@@ -45,8 +45,18 @@ export const tasksAPI = {
 
 export const authAPI = {
     login (payload:LoginParamsType){
-        return instance.post<LoginParamsType,CommonTask<{userId:number}>>('auth/login',payload)
+        return instance.post<LoginParamsType,AxiosResponse<CommonTask<{userId:number}>>>('auth/login',payload)
+    },
+    me () {
+        return instance.get<CommonTask<MeType>>('auth/me')
     }
+}
+
+
+type MeType = {
+    id:number
+    email:string
+    login:string
 }
 
 export type LoginParamsType = {

@@ -11,6 +11,7 @@ import {useDispatch} from "react-redux";
 import {setTaskTC} from "./state/taskReducer";
 
 
+
 type TodolistType = {
     deleteTodolist: (idTodol: string) => void
     tasksForTodolist: Array<TaskType>
@@ -30,7 +31,9 @@ type TodolistType = {
 
 
 export const Todolist = (props: TodolistType) => {
+
     const dispatch = useDispatch<any>()
+
     useEffect(()=>{
         dispatch (setTaskTC(props.idTodol))
     },[])

@@ -38,7 +38,8 @@ const initialGlobalState = {
     },
     app : {
         statusLoading: 'idle',
-        errorSnackbar:'ТРЯМ-С!'
+        errorSnackbar:'ТРЯМ-С!',
+        initialized: false
     },
     isLogin:{
         isLoggedIn:false

@@ -20,12 +20,14 @@ import {StateStoreType} from "./state/store";
 import LinearProgress from "@mui/material/LinearProgress";
 import {StatusLoadingType} from "./state/appReducer";
 import {ErrorSnackbar} from "./ErrorSnackbar";
+import {Navigate} from "react-router-dom";
 
 
 
 
 export const RootTodolist = () => {
     const dispatch = useDispatch<any>()
+    const isLogged = useSelector<StateStoreType,boolean>(state => state.isLogin.isLoggedIn)
 
     const todolists = useSelector<StateStoreType, Array<CompleteTodolistType>>(state => state.todolists)
 
@@ -73,8 +75,16 @@ export const RootTodolist = () => {
     }
 
     useEffect(() =>{
+        if(!isLogged){
+            return
+        }
         dispatch(setTodolist())
     },[])
+
+    if(!isLogged){
+        debugger
+        return <Navigate to={'/login'}/>
+    }
 
 
     return (

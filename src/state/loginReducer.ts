@@ -35,12 +35,11 @@ export const loginTC = (payload:LoginParamsType) => (
     dispatch(setStatusLoadingAC('loading'))
     authAPI.login(payload)
         .then((respons)=>{
-            if(respons.resultCode===0){
+            if(respons.data.resultCode ===0){
                 dispatch(setValueIsLogged(true))
             }  else   {
-                utilsFunctionRejectPromis(respons.messages[0],dispatch)
+                utilsFunctionRejectPromis(respons.data.messages[0],dispatch)
             }
-
         })
         .catch((error) => {
             utilsFunctionRejectPromis(error.message,dispatch)
