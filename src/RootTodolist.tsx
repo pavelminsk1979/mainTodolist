@@ -82,7 +82,6 @@ export const RootTodolist = () => {
     },[])
 
     if(!isLogged){
-        debugger
         return <Navigate to={'/login'}/>
     }
 

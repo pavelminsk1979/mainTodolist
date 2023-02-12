@@ -49,6 +49,9 @@ export const authAPI = {
     },
     me () {
         return instance.get<CommonTask<MeType>>('auth/me')
+    },
+    deleteLogin(){
+        return instance.delete<CommonTask>('auth/login')
     }
 }
 
@@ -76,6 +79,7 @@ export type ModalType = {
 }
 
 export type CommonTask<T = {}> = {
+    fieldsErrors:string []
     messages: Array<string>
     resultCode: number
     data: T

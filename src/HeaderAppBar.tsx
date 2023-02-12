@@ -6,8 +6,16 @@ import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
+import {useDispatch} from "react-redux";
+import {deleteLoginTC} from "./state/appReducer";
 
 export default function HeaderAppBar() {
+    const dispatch = useDispatch<any>()
+    
+    const deleteLoginHandler = () => {
+      dispatch(deleteLoginTC())
+    }
+    
     return (
         <Box sx={{ flexGrow: 1 }}>
             <AppBar position="static">
@@ -24,7 +32,9 @@ export default function HeaderAppBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         TODOLIST
                     </Typography>
-                    <Button color="inherit">Login</Button>
+                    <Button 
+                        onClick={deleteLoginHandler}
+                        color="inherit">MerryPopins-GoogdBye</Button>
                 </Toolbar>
             </AppBar>
         </Box>

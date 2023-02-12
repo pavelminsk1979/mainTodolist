@@ -34,8 +34,8 @@ export const appReducer = (state: initialStateType = initialState, action: Actio
         case "ERROR-SNACKBAR-SHOW": {
             return {...state, errorSnackbar: action.error}
         }
-        case "SET-INITIALIZED":{
-            return {...state,initialized:action.value}
+        case "SET-INITIALIZED": {
+            return {...state, initialized: action.value}
         }
         default:
             return state
@@ -43,11 +43,11 @@ export const appReducer = (state: initialStateType = initialState, action: Actio
 }
 
 type setAppInitialisedACType = ReturnType<typeof setAppInitialisedAC>
-export const setAppInitialisedAC = (value:boolean) => {
-  return{
-      type:'SET-INITIALIZED',
-      value
-  }as const
+export const setAppInitialisedAC = (value: boolean) => {
+    return {
+        type: 'SET-INITIALIZED',
+        value
+    } as const
 }
 
 
@@ -69,6 +69,22 @@ export const setStatusLoadingAC = (statusLoading: StatusLoadingType) => {
     } as const
 }
 
+export const deleteLoginTC = () => (dispatch: Dispatch) => {
+    dispatch(setStatusLoadingAC('loading'))
+    authAPI.deleteLogin()
+        .then((respons) => {
+            if (respons.data.resultCode === 0) {
+                dispatch(setValueIsLogged(false))
+            } else {
+                utilsFunctionRejectPromis(respons.data.messages[0], dispatch)
+            }
+        })
+        .catch((error) => {
+            utilsFunctionRejectPromis(error.message, dispatch)
+        })
+}
+
+
 export const initializeAppTC = () => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
     authAPI.me()
@@ -82,9 +98,9 @@ export const initializeAppTC = () => (dispatch: Dispatch) => {
         .catch((error) => {
             utilsFunctionRejectPromis(error.message, dispatch)
         })
-        .finally(()=>{
+        .finally(() => {
             dispatch(setAppInitialisedAC(true))
         })
 }
 
-type ActionType = setStatusLoadingACType | errorSnackbarShowACType |setAppInitialisedACType
+type ActionType = setStatusLoadingACType | errorSnackbarShowACType | setAppInitialisedACType
