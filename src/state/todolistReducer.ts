@@ -1,7 +1,8 @@
 import {todolistAPI, TodolistType} from "../api/api";
 import {Dispatch} from "redux";
-import { setStatusLoadingAC} from "./appReducer";
+import {setStatusLoadingAC} from "./appReducer";
 import {utilsFunctionRejectPromis, utilsFunctionShowError} from "../utils/utilsForFunctionsThanks";
+import {setTaskTC} from "./taskReducer";
 
 
 export type filterValueType = 'all' | 'complited' | 'needToDo'
@@ -43,6 +44,9 @@ export const todolistReducer = (state: Array<CompleteTodolistType> = initialStat
         case "CHANGE-DISABLE-STATUS": {
             return state.map(el => el.id === action.todolistId
                 ? {...el, disableStatus: action.disableStatus} : el)
+        }
+        case "LOGOUT-DATA-DELETE":{
+            return []
         }
         default:
             return state
@@ -103,6 +107,13 @@ export const changeDisableStatusAC = (todolistId: string, disableStatus: boolean
     } as const
 }
 
+export type whenLogoutAllDataDeliteType = ReturnType<typeof whenLogoutAllDataDelite>
+export const whenLogoutAllDataDelite = () => {
+    return {
+        type: 'LOGOUT-DATA-DELETE'
+    } as const
+}
+
 
 export const changeTitleTodolistTC = (todolistId: string, title: string) => (dispatch: Dispatch) => {
     dispatch(setStatusLoadingAC('loading'))
@@ -112,7 +123,7 @@ export const changeTitleTodolistTC = (todolistId: string, title: string) => (dis
             dispatch(setStatusLoadingAC('idle'))
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
             dispatch(changeDisableStatusAC(todolistId, false))
         })
 }
@@ -130,7 +141,7 @@ export const createTodolistTC = (title: string) => (dispatch: Dispatch) => {
             }
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
         })
 }
 
@@ -145,21 +156,27 @@ export const deleteTodolistTC = (todolistId: string) => (dispatch: Dispatch) => 
             dispatch(changeDisableStatusAC(todolistId, false))
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
             dispatch(changeDisableStatusAC(todolistId, false))
         })
 }
 
 
-export const setTodolist = () => (dispatch: Dispatch) => {
+export const setTodolist = () => (dispatch: any) => {
     dispatch(setStatusLoadingAC('loading'))
     todolistAPI.getTodolists()
         .then((respons) => {
             dispatch(setTodolistAC(respons.data))
             dispatch(setStatusLoadingAC('idle'))
+            return respons.data
+        })
+        .then((todol) => {
+            todol.forEach(todolist => {
+                dispatch(setTaskTC(todolist.id))
+            })
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
         })
 }
 
@@ -169,6 +186,6 @@ type ActionsType = deleteTodolistType
     | changeTodolistFilterType
     | setTodolistACType
     | changeDisableStatusACType
-
+    | whenLogoutAllDataDeliteType
 
 

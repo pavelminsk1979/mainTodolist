@@ -1,8 +1,13 @@
-import {createTodolistType, deleteTodolistType, setTodolistACType} from "./todolistReducer";
+import {
+    createTodolistType,
+    deleteTodolistType,
+    setTodolistACType,
+    whenLogoutAllDataDeliteType
+} from "./todolistReducer";
 import {tasksAPI, TaskStatuses, TaskType} from "../api/api";
 import {Dispatch} from "redux";
 import {StateStoreType} from "./store";
-import { setStatusLoadingAC} from "./appReducer";
+import {setStatusLoadingAC} from "./appReducer";
 import {utilsFunctionRejectPromis, utilsFunctionShowError} from "../utils/utilsForFunctionsThanks";
 
 
@@ -73,6 +78,9 @@ export const taskReducer = (state: StateTasksType = initialState,
             let copyStateTasks = {...state}
             copyStateTasks[action.todolistId] = action.tasks
             return copyStateTasks
+        }
+        case "LOGOUT-DATA-DELETE":{
+            return {}
         }
 
         default:
@@ -161,7 +169,7 @@ export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: 
                 dispatch(setStatusLoadingAC('idle'))
             })
             .catch((error) => {
-                utilsFunctionRejectPromis(error.message,dispatch)
+                utilsFunctionRejectPromis(error.message, dispatch)
             })
     }
 }
@@ -187,7 +195,7 @@ export const changeTitleTaskTC = (todolistId: string, taskId: string, editText: 
                 dispatch(setStatusLoadingAC('idle'))
             })
             .catch((error) => {
-                utilsFunctionRejectPromis(error.message,dispatch)
+                utilsFunctionRejectPromis(error.message, dispatch)
             })
     }
 }
@@ -205,7 +213,7 @@ export const createTaskTC = (todolistId: string, title: string) => (dispatch: Di
 
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
         })
 }
 
@@ -217,7 +225,7 @@ export const deleteTaskTC = (todolistId: string, taskId: string) => (dispatch: D
             dispatch(setStatusLoadingAC('idle'))
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
         })
 }
 
@@ -230,7 +238,7 @@ export const setTaskTC = (todolistId: string) => (dispatch: Dispatch) => {
             dispatch(setStatusLoadingAC('idle'))
         })
         .catch((error) => {
-            utilsFunctionRejectPromis(error.message,dispatch)
+            utilsFunctionRejectPromis(error.message, dispatch)
         })
 }
 
@@ -243,5 +251,6 @@ type ActionsType = deleteTaskACType
     | createTodolistType
     | setTodolistACType
     | setTaskACType
+    | whenLogoutAllDataDeliteType
 
 

@@ -2,6 +2,7 @@ import {Dispatch} from "redux";
 import {authAPI} from "../api/api";
 import {setValueIsLogged} from "./loginReducer";
 import {utilsFunctionRejectPromis} from "../utils/utilsForFunctionsThanks";
+import {whenLogoutAllDataDelite} from "./todolistReducer";
 
 
 export type StatusLoadingType = 'idle' | 'loading' | 'failed'
@@ -75,6 +76,7 @@ export const deleteLoginTC = () => (dispatch: Dispatch) => {
         .then((respons) => {
             if (respons.data.resultCode === 0) {
                 dispatch(setValueIsLogged(false))
+                dispatch(whenLogoutAllDataDelite())
             } else {
                 utilsFunctionRejectPromis(respons.data.messages[0], dispatch)
             }
