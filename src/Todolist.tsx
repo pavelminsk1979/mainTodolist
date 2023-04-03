@@ -31,12 +31,7 @@ type TodolistType = {
 
 
 export const Todolist = (props: TodolistType) => {
-/*
-    const dispatch = useDispatch<any>()
 
-    useEffect(()=>{
-        dispatch (setTaskTC(props.idTodol))
-    },[])*/
 
     const changeTitleTodolist = (editText: string) => {
         props.changeTitleTodolist(props.idTodol, editText)

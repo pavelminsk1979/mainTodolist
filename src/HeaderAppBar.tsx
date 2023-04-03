@@ -32,9 +32,10 @@ export default function HeaderAppBar() {
                     <Typography variant="h6" component="div" sx={{ flexGrow: 1 }}>
                         TODOLIST
                     </Typography>
+                    <span>localhost:3000/3001/pavelminsk1979@mail.ru/1979@pav</span>
                     <Button 
                         onClick={deleteLoginHandler}
-                        color="inherit">MerryPopins-GoogdBye</Button>
+                        color="inherit">LOG OUT</Button>
                 </Toolbar>
             </AppBar>
         </Box>
