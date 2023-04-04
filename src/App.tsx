@@ -26,10 +26,10 @@ const App = () => {
                 <HeaderAppBar/>
 
                 <Routes>
-                    <Route path="/" element={<RootTodolist/>}/>
-                    <Route path="login" element={<Login/>}/>
-                    <Route path="404" element={<h3>404: PAGE NOT FOUND</h3>}/>
-                    <Route path="*" element={<Navigate to="/404"/>}/>
+                    <Route path="/*" element={<RootTodolist/>}/>
+                    <Route path="/login" element={<Login/>}/>
+                    {/*<Route path="404" element={<h3>404: PAGE NOT FOUND</h3>}/>*/}
+                    {/*<Route path="*" element={<h3>404: PAGE NOT FOUND</h3>}/>*/}
                 </Routes>
 
 
