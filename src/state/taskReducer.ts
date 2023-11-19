@@ -144,6 +144,7 @@ export const setTaskAC = (todolistId: string, tasks: Array<TaskType>) => {
 
 
 export const changeChekboxTaskTC = (todolistId: string, taskId: string, status: boolean) => (dispatch: Dispatch, getState: () => StateStoreType) => {
+    debugger
     const state = getState()
     const allTasks = state.tasks
     const taskForTodolist = allTasks[todolistId]
